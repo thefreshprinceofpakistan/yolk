@@ -60,9 +60,22 @@ export default function Home() {
   const [filter, setFilter] = useState<ExchangeType>('all');
   const [isLoading, setIsLoading] = useState(false);
   const [allListings, setAllListings] = useState(mockListings);
+  const [userSession, setUserSession] = useState<{ name: string; isLoggedIn: boolean } | null>(null);
 
-  // Load user-submitted listings from localStorage on component mount
+  // Load user session and listings from localStorage on component mount
   useEffect(() => {
+    // Load user session
+    const savedSession = localStorage.getItem('userSession');
+    if (savedSession) {
+      try {
+        const session = JSON.parse(savedSession);
+        setUserSession(session);
+      } catch (error) {
+        console.error('Error loading user session:', error);
+      }
+    }
+
+    // Load user-submitted listings
     const savedListings = localStorage.getItem('eggListings');
     if (savedListings) {
       try {
@@ -105,6 +118,30 @@ export default function Home() {
     setTimeout(() => setIsLoading(false), 300);
   };
 
+  const handleDeleteListing = (listingId: string) => {
+    if (confirm('Are you sure you want to delete this egg listing?')) {
+      // Remove from localStorage
+      try {
+        const savedListings = localStorage.getItem('eggListings');
+        if (savedListings) {
+          const parsedListings = JSON.parse(savedListings);
+          const updatedListings = parsedListings.filter((listing: { id: string }) => listing.id !== listingId);
+          localStorage.setItem('eggListings', JSON.stringify(updatedListings));
+        }
+      } catch (error) {
+        console.error('Error deleting listing:', error);
+      }
+
+      // Update state
+      setAllListings(prev => prev.filter(listing => listing.id !== listingId));
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userSession');
+    setUserSession(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell">
       {/* Header */}
@@ -117,9 +154,33 @@ export default function Home() {
                 Eggconomy
               </h1>
             </div>
-            <Link href="/add" className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
-              Add Your Eggs
-            </Link>
+            <div className="flex items-center space-x-3">
+              {userSession?.isLoggedIn ? (
+                <>
+                  <span className="text-sm font-fun text-gray-600">
+                    Welcome, {userSession.name}!
+                  </span>
+                  <Link href="/add" className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
+                    Add Your Eggs
+                  </Link>
+                  <button 
+                    onClick={handleLogout}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-medium px-4 py-2 rounded-full transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/add" className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
+                    Add Your Eggs
+                  </Link>
+                  <Link href="/login" className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-medium px-4 py-2 rounded-full transition-colors duration-200">
+                    Sign In
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -223,10 +284,23 @@ export default function Home() {
                   )}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-gray-200">
+                <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
                   <button className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200">
                     Crack a Deal! 🥚
                   </button>
+                  
+                  {/* Delete button - only show for logged-in user's own listings */}
+                  {userSession?.isLoggedIn && 
+                   !mockListings.find(mock => mock.id === listing.id) && 
+                   listing.name === userSession.name && (
+                    <button 
+                      onClick={() => handleDeleteListing(listing.id)}
+                      className="bg-red-100 hover:bg-red-200 text-red-700 font-fun font-medium px-3 py-2 rounded-full transition-colors duration-200 text-sm"
+                      title="Delete this listing"
+                    >
+                      🗑️ Delete
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

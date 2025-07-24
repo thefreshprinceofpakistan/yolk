@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 type ExchangeType = 'gift' | 'barter' | 'cash' | 'hybrid';
@@ -20,6 +20,25 @@ export default function AddEggs() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [userSession, setUserSession] = useState<{ name: string; isLoggedIn: boolean } | null>(null);
+
+  // Load user session on component mount
+  useEffect(() => {
+    const savedSession = localStorage.getItem('userSession');
+    if (savedSession) {
+      try {
+        const session = JSON.parse(savedSession);
+        setUserSession(session);
+        // Auto-populate name field with logged-in user's name
+        setFormData(prev => ({
+          ...prev,
+          name: session.name
+        }));
+      } catch (error) {
+        console.error('Error loading user session:', error);
+      }
+    }
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -71,6 +90,29 @@ export default function AddEggs() {
       window.location.href = '/';
     }, 3000);
   };
+
+  // If not logged in, show login prompt
+  if (!userSession?.isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell flex items-center justify-center">
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-8 shadow-lg text-center max-w-md mx-4">
+          <div className="text-6xl mb-4 animate-crack">🥚</div>
+          <h2 className="text-2xl font-fun font-bold text-gray-800 mb-4">
+            Sign In Required
+          </h2>
+          <p className="text-gray-600 font-fun mb-6">
+            Please sign in to add your egg listings!
+          </p>
+          <Link 
+            href="/login"
+            className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-6 py-3 rounded-full transition-colors duration-200 shadow-md inline-block"
+          >
+            Sign In
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (showSuccess) {
     return (
@@ -127,10 +169,10 @@ export default function AddEggs() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name */}
+            {/* Name - pre-filled and read-only for logged-in users */}
             <div>
               <label htmlFor="name" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                Your Name or Nickname *
+                Your Name *
               </label>
               <input
                 type="text"
@@ -139,9 +181,13 @@ export default function AddEggs() {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                readOnly
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 font-fun"
                 placeholder="e.g., Sarah from Berea"
               />
+              <p className="text-xs text-gray-500 mt-1 font-fun">
+                Your name is automatically filled from your account
+              </p>
             </div>
 
             {/* Quantity */}
