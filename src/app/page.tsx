@@ -56,13 +56,31 @@ const mockListings = [
 
 type ExchangeType = 'all' | 'gift' | 'barter' | 'cash' | 'hybrid';
 
+type Listing = {
+  id: string;
+  name: string;
+  quantity: number;
+  exchangeType: 'gift' | 'barter' | 'cash' | 'hybrid';
+  location: string;
+  notes?: string;
+  datePosted: string;
+  barterFor?: string;
+  suggestedCash?: string;
+  paymentHandles?: {
+    venmo?: string;
+    paypal?: string;
+  };
+};
+
 export default function Home() {
   const [filter, setFilter] = useState<ExchangeType>('all');
   const [isLoading, setIsLoading] = useState(false);
-  const [allListings, setAllListings] = useState(mockListings);
+  const [allListings, setAllListings] = useState<Listing[]>(mockListings);
   const [userSession, setUserSession] = useState<{ name: string; isLoggedIn: boolean } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
+  const [selectedDeal, setSelectedDeal] = useState<Listing | null>(null);
+  const [showDealModal, setShowDealModal] = useState(false);
 
   // Load user session and listings from localStorage on component mount
   useEffect(() => {
@@ -178,6 +196,16 @@ export default function Home() {
     setSearchQuery('');
     setLocationFilter('');
     setFilter('all');
+  };
+
+  const handleCrackDeal = (listing: Listing) => {
+    setSelectedDeal(listing);
+    setShowDealModal(true);
+  };
+
+  const closeDealModal = () => {
+    setShowDealModal(false);
+    setSelectedDeal(null);
   };
 
   return (
@@ -390,7 +418,10 @@ export default function Home() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t-2 border-egg-pixel-gray flex justify-between items-center">
-                  <button className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
+                  <button 
+                    onClick={() => handleCrackDeal(listing)}
+                    className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                  >
                     CRACK A DEAL! 🥚
                   </button>
                   
@@ -443,6 +474,122 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {/* Deal Modal */}
+      {showDealModal && selectedDeal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-egg-white rounded-none border-3 border-egg-yolk shadow-pixel-lg max-w-md w-full p-6">
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-4 animate-bounce">🥚</div>
+              <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-2">
+                CRACK A DEAL!
+              </h2>
+              <p className="font-fun text-egg-pixel-black">
+                Get in touch with {selectedDeal.name}
+              </p>
+            </div>
+
+            <div className="space-y-4 mb-6">
+              {/* Deal Details */}
+              <div className="bg-egg-yolkLight/30 p-4 border-2 border-egg-yolk">
+                <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                  DEAL DETAILS:
+                </h3>
+                <div className="font-fun text-egg-pixel-black space-y-1">
+                  <p><strong>Quantity:</strong> {selectedDeal.quantity} eggs</p>
+                  <p><strong>Location:</strong> {selectedDeal.location}</p>
+                  <p><strong>Type:</strong> {getExchangeLabel(selectedDeal.exchangeType)}</p>
+                  {selectedDeal.barterFor && (
+                    <p><strong>Wants:</strong> {selectedDeal.barterFor}</p>
+                  )}
+                  {selectedDeal.suggestedCash && (
+                    <p><strong>Price:</strong> {selectedDeal.suggestedCash}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              {selectedDeal.exchangeType === 'cash' || selectedDeal.exchangeType === 'hybrid' ? (
+                <div className="bg-egg-white border-2 border-egg-pixel-black p-4">
+                  <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                    PAYMENT METHODS:
+                  </h3>
+                  <div className="font-fun text-egg-pixel-black space-y-2">
+                    {selectedDeal.paymentHandles?.venmo && (
+                      <div className="flex items-center space-x-2">
+                        <span className="text-green-600">💚</span>
+                        <span><strong>Venmo:</strong> {selectedDeal.paymentHandles.venmo}</span>
+                      </div>
+                    )}
+                    {selectedDeal.paymentHandles?.paypal && (
+                      <div className="flex items-center space-x-2">
+                        <span className="text-blue-600">💙</span>
+                        <span><strong>PayPal:</strong> {selectedDeal.paymentHandles.paypal}</span>
+                      </div>
+                    )}
+                    {!selectedDeal.paymentHandles?.venmo && !selectedDeal.paymentHandles?.paypal && (
+                      <p className="text-egg-pixel-black">Contact seller for payment details</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-egg-white border-2 border-egg-pixel-black p-4">
+                  <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                    CONTACT INFO:
+                  </h3>
+                  <p className="font-fun text-egg-pixel-black">
+                    Reach out to {selectedDeal.name} to arrange pickup and discuss details!
+                  </p>
+                </div>
+              )}
+
+              {/* Notes */}
+              {selectedDeal.notes && (
+                <div className="bg-egg-white border-2 border-egg-pixel-black p-4">
+                  <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                    NOTES:
+                  </h3>
+                  <p className="font-fun text-egg-pixel-black">
+                    {selectedDeal.notes}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              <button
+                onClick={closeDealModal}
+                className="flex-1 bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
+              >
+                CLOSE
+              </button>
+              <button
+                onClick={() => {
+                  // Copy contact info to clipboard
+                  const contactInfo = [
+                    `Egg Deal with ${selectedDeal.name}`,
+                    `Quantity: ${selectedDeal.quantity} eggs`,
+                    `Location: ${selectedDeal.location}`,
+                    `Type: ${getExchangeLabel(selectedDeal.exchangeType)}`,
+                    selectedDeal.barterFor && `Wants: ${selectedDeal.barterFor}`,
+                    selectedDeal.suggestedCash && `Price: ${selectedDeal.suggestedCash}`,
+                    selectedDeal.paymentHandles?.venmo && `Venmo: ${selectedDeal.paymentHandles.venmo}`,
+                    selectedDeal.paymentHandles?.paypal && `PayPal: ${selectedDeal.paymentHandles.paypal}`,
+                    selectedDeal.notes && `Notes: ${selectedDeal.notes}`,
+                  ].filter(Boolean).join('\n');
+                  
+                  navigator.clipboard.writeText(contactInfo);
+                  alert('Deal details copied to clipboard! 📋');
+                }}
+                className="flex-1 bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+              >
+                COPY DEAL INFO 📋
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
