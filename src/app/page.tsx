@@ -81,6 +81,15 @@ export default function Home() {
   const [locationFilter, setLocationFilter] = useState('');
   const [selectedDeal, setSelectedDeal] = useState<Listing | null>(null);
   const [showDealModal, setShowDealModal] = useState(false);
+  const [showMessageForm, setShowMessageForm] = useState(false);
+  const [messageForm, setMessageForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
 
   // Load user session and listings from localStorage on component mount
   useEffect(() => {
@@ -206,6 +215,53 @@ export default function Home() {
   const closeDealModal = () => {
     setShowDealModal(false);
     setSelectedDeal(null);
+    setShowMessageForm(false);
+    setMessageSent(false);
+    setMessageForm({ name: '', email: '', phone: '', message: '' });
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSendingMessage(true);
+
+    // Create message object
+    const newMessage = {
+      id: Date.now().toString(),
+      listingId: selectedDeal?.id,
+      listingName: selectedDeal?.name,
+      from: messageForm.name,
+      email: messageForm.email,
+      phone: messageForm.phone,
+      message: messageForm.message,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Save to localStorage
+    try {
+      const existingMessages = localStorage.getItem('eggMessages');
+      const savedMessages = existingMessages ? JSON.parse(existingMessages) : [];
+      savedMessages.push(newMessage);
+      localStorage.setItem('eggMessages', JSON.stringify(savedMessages));
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+
+    // Simulate sending delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setIsSendingMessage(false);
+    setMessageSent(true);
+    
+    // Reset form
+    setMessageForm({ name: '', email: '', phone: '', message: '' });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setMessageForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
@@ -478,7 +534,7 @@ export default function Home() {
       {/* Deal Modal */}
       {showDealModal && selectedDeal && (
         <div className="fixed inset-0 bg-black flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-none border-3 border-egg-yolk shadow-pixel-lg max-w-md w-full p-6">
+          <div className="bg-white rounded-none border-3 border-egg-yolk shadow-pixel-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="text-center mb-6">
               <div className="text-4xl mb-4 animate-bounce">🥚</div>
               <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-2">
@@ -489,104 +545,235 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="space-y-4 mb-6">
-              {/* Deal Details */}
-              <div className="bg-yellow-200 p-4 border-2 border-egg-yolk">
-                <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
-                  DEAL DETAILS:
-                </h3>
-                <div className="font-fun text-egg-pixel-black space-y-1">
-                  <p><strong>Quantity:</strong> {selectedDeal.quantity} eggs</p>
-                  <p><strong>Location:</strong> {selectedDeal.location}</p>
-                  <p><strong>Type:</strong> {getExchangeLabel(selectedDeal.exchangeType)}</p>
-                  {selectedDeal.barterFor && (
-                    <p><strong>Wants:</strong> {selectedDeal.barterFor}</p>
-                  )}
-                  {selectedDeal.suggestedCash && (
-                    <p><strong>Price:</strong> {selectedDeal.suggestedCash}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Contact Information */}
-              {selectedDeal.exchangeType === 'cash' || selectedDeal.exchangeType === 'hybrid' ? (
-                <div className="bg-white border-2 border-egg-pixel-black p-4">
-                  <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
-                    PAYMENT METHODS:
-                  </h3>
-                  <div className="font-fun text-egg-pixel-black space-y-2">
-                    {selectedDeal.paymentHandles?.venmo && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-green-600">💚</span>
-                        <span><strong>Venmo:</strong> {selectedDeal.paymentHandles.venmo}</span>
-                      </div>
-                    )}
-                    {selectedDeal.paymentHandles?.paypal && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-blue-600">💙</span>
-                        <span><strong>PayPal:</strong> {selectedDeal.paymentHandles.paypal}</span>
-                      </div>
-                    )}
-                    {!selectedDeal.paymentHandles?.venmo && !selectedDeal.paymentHandles?.paypal && (
-                      <p className="text-egg-pixel-black">Contact seller for payment details</p>
-                    )}
+            {!showMessageForm && !messageSent && (
+              <>
+                <div className="space-y-4 mb-6">
+                  {/* Deal Details */}
+                  <div className="bg-yellow-200 p-4 border-2 border-egg-yolk">
+                    <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                      DEAL DETAILS:
+                    </h3>
+                    <div className="font-fun text-egg-pixel-black space-y-1">
+                      <p><strong>Quantity:</strong> {selectedDeal.quantity} eggs</p>
+                      <p><strong>Location:</strong> {selectedDeal.location}</p>
+                      <p><strong>Type:</strong> {getExchangeLabel(selectedDeal.exchangeType)}</p>
+                      {selectedDeal.barterFor && (
+                        <p><strong>Wants:</strong> {selectedDeal.barterFor}</p>
+                      )}
+                      {selectedDeal.suggestedCash && (
+                        <p><strong>Price:</strong> {selectedDeal.suggestedCash}</p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="bg-white border-2 border-egg-pixel-black p-4">
-                  <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
-                    CONTACT INFO:
-                  </h3>
-                  <p className="font-fun text-egg-pixel-black">
-                    Reach out to {selectedDeal.name} to arrange pickup and discuss details!
-                  </p>
-                </div>
-              )}
 
-              {/* Notes */}
-              {selectedDeal.notes && (
-                <div className="bg-white border-2 border-egg-pixel-black p-4">
-                  <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
-                    NOTES:
-                  </h3>
-                  <p className="font-fun text-egg-pixel-black">
-                    {selectedDeal.notes}
-                  </p>
-                </div>
-              )}
-            </div>
+                  {/* Contact Information */}
+                  {selectedDeal.exchangeType === 'cash' || selectedDeal.exchangeType === 'hybrid' ? (
+                    <div className="bg-white border-2 border-egg-pixel-black p-4">
+                      <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                        PAYMENT METHODS:
+                      </h3>
+                      <div className="font-fun text-egg-pixel-black space-y-2">
+                        {selectedDeal.paymentHandles?.venmo && (
+                          <div className="flex items-center space-x-2">
+                            <span className="text-green-600">💚</span>
+                            <span><strong>Venmo:</strong> {selectedDeal.paymentHandles.venmo}</span>
+                          </div>
+                        )}
+                        {selectedDeal.paymentHandles?.paypal && (
+                          <div className="flex items-center space-x-2">
+                            <span className="text-blue-600">💙</span>
+                            <span><strong>PayPal:</strong> {selectedDeal.paymentHandles.paypal}</span>
+                          </div>
+                        )}
+                        {!selectedDeal.paymentHandles?.venmo && !selectedDeal.paymentHandles?.paypal && (
+                          <p className="text-egg-pixel-black">Contact seller for payment details</p>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white border-2 border-egg-pixel-black p-4">
+                      <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                        CONTACT INFO:
+                      </h3>
+                      <p className="font-fun text-egg-pixel-black">
+                        Reach out to {selectedDeal.name} to arrange pickup and discuss details!
+                      </p>
+                    </div>
+                  )}
 
-            {/* Action Buttons */}
-            <div className="flex space-x-3">
-              <button
-                onClick={closeDealModal}
-                className="flex-1 bg-gray-300 hover:bg-gray-400 text-egg-pixel-black font-pixel font-medium py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
-              >
-                CLOSE
-              </button>
-              <button
-                onClick={() => {
-                  // Copy contact info to clipboard
-                  const contactInfo = [
-                    `Egg Deal with ${selectedDeal.name}`,
-                    `Quantity: ${selectedDeal.quantity} eggs`,
-                    `Location: ${selectedDeal.location}`,
-                    `Type: ${getExchangeLabel(selectedDeal.exchangeType)}`,
-                    selectedDeal.barterFor && `Wants: ${selectedDeal.barterFor}`,
-                    selectedDeal.suggestedCash && `Price: ${selectedDeal.suggestedCash}`,
-                    selectedDeal.paymentHandles?.venmo && `Venmo: ${selectedDeal.paymentHandles.venmo}`,
-                    selectedDeal.paymentHandles?.paypal && `PayPal: ${selectedDeal.paymentHandles.paypal}`,
-                    selectedDeal.notes && `Notes: ${selectedDeal.notes}`,
-                  ].filter(Boolean).join('\n');
-                  
-                  navigator.clipboard.writeText(contactInfo);
-                  alert('Deal details copied to clipboard! 📋');
-                }}
-                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-egg-pixel-black font-pixel font-semibold py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
-              >
-                COPY DEAL INFO 📋
-              </button>
-            </div>
+                  {/* Notes */}
+                  {selectedDeal.notes && (
+                    <div className="bg-white border-2 border-egg-pixel-black p-4">
+                      <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
+                        NOTES:
+                      </h3>
+                      <p className="font-fun text-egg-pixel-black">
+                        {selectedDeal.notes}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-3">
+                  <button
+                    onClick={closeDealModal}
+                    className="flex-1 bg-gray-300 hover:bg-gray-400 text-egg-pixel-black font-pixel font-medium py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
+                  >
+                    CLOSE
+                  </button>
+                  <button
+                    onClick={() => setShowMessageForm(true)}
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-pixel font-semibold py-3 rounded-none border-2 border-blue-700 shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                  >
+                    SEND MESSAGE 💬
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Copy contact info to clipboard
+                      const contactInfo = [
+                        `Egg Deal with ${selectedDeal.name}`,
+                        `Quantity: ${selectedDeal.quantity} eggs`,
+                        `Location: ${selectedDeal.location}`,
+                        `Type: ${getExchangeLabel(selectedDeal.exchangeType)}`,
+                        selectedDeal.barterFor && `Wants: ${selectedDeal.barterFor}`,
+                        selectedDeal.suggestedCash && `Price: ${selectedDeal.suggestedCash}`,
+                        selectedDeal.paymentHandles?.venmo && `Venmo: ${selectedDeal.paymentHandles.venmo}`,
+                        selectedDeal.paymentHandles?.paypal && `PayPal: ${selectedDeal.paymentHandles.paypal}`,
+                        selectedDeal.notes && `Notes: ${selectedDeal.notes}`,
+                      ].filter(Boolean).join('\n');
+                      
+                      navigator.clipboard.writeText(contactInfo);
+                      alert('Deal details copied to clipboard! 📋');
+                    }}
+                    className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-egg-pixel-black font-pixel font-semibold py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                  >
+                    COPY DEAL INFO 📋
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Message Form */}
+            {showMessageForm && !messageSent && (
+              <div className="space-y-4">
+                <h3 className="font-pixel font-semibold text-egg-pixel-black text-center mb-4">
+                  SEND MESSAGE TO {selectedDeal.name.toUpperCase()}
+                </h3>
+                
+                <form onSubmit={handleSendMessage} className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                      YOUR NAME *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={messageForm.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
+                      placeholder="Your name"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                      EMAIL *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={messageForm.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                      PHONE (OPTIONAL)
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={messageForm.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                      MESSAGE *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={messageForm.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={4}
+                      className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk resize-none"
+                      placeholder="Hi! I&apos;m interested in your eggs. When would be a good time to pick them up?"
+                    />
+                  </div>
+
+                  <div className="flex space-x-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowMessageForm(false)}
+                      className="flex-1 bg-gray-300 hover:bg-gray-400 text-egg-pixel-black font-pixel font-medium py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
+                    >
+                      BACK
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSendingMessage}
+                      className={`flex-1 py-3 rounded-none font-pixel font-semibold border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 ${
+                        isSendingMessage
+                          ? 'bg-gray-300 text-egg-pixel-black cursor-not-allowed'
+                          : 'bg-green-500 hover:bg-green-600 text-white hover:shadow-pixel-lg'
+                      }`}
+                    >
+                      {isSendingMessage ? (
+                        <div className="flex items-center justify-center space-x-2">
+                          <div className="text-2xl animate-wiggle">🥚</div>
+                          <span>SENDING...</span>
+                        </div>
+                      ) : (
+                        'SEND MESSAGE 📤'
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Message Sent Success */}
+            {messageSent && (
+              <div className="text-center space-y-4">
+                <div className="text-6xl mb-4 animate-bounce">✅</div>
+                <h3 className="text-xl font-pixel font-semibold text-egg-pixel-black">
+                  MESSAGE SENT!
+                </h3>
+                <p className="font-fun text-egg-pixel-black">
+                  Your message has been sent to {selectedDeal.name}. They&apos;ll get back to you soon!
+                </p>
+                <button
+                  onClick={closeDealModal}
+                  className="bg-green-500 hover:bg-green-600 text-white font-pixel font-semibold px-6 py-3 rounded-none border-2 border-green-700 shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                >
+                  CLOSE
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
