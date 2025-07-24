@@ -7,17 +7,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        yolk: {
-          light: '#FFF9E3', // Eggshell
-          DEFAULT: '#FFE066', // Yolk yellow
-          dark: '#FFD23F', // Deeper yolk
+        // Cute pixelated egg theme
+        egg: {
+          yolk: '#FFD93D', // Bright pixel yellow
+          yolkLight: '#FFE566', // Lighter yellow
+          yolkDark: '#FFB800', // Darker yellow
+          white: '#FFFFFF', // Pure white
+          shell: '#F8F8F8', // Off-white shell
+          shellDark: '#E8E8E8', // Slightly darker shell
+          pixel: {
+            yellow: '#FFD93D',
+            yellowLight: '#FFE566',
+            yellowDark: '#FFB800',
+            white: '#FFFFFF',
+            gray: '#E0E0E0',
+            grayDark: '#C0C0C0',
+            black: '#2D2D2D',
+          }
         },
-        shell: '#F7E7CE', // Egg shell
-        sky: '#BEE3DB', // Pastel blue
-        grass: '#C7EFCF', // Pastel green
-        blush: '#F7C5CC', // Pastel pink
+        // Keep some of the original colors for variety
+        sky: '#BEE3DB',
+        grass: '#C7EFCF',
+        blush: '#F7C5CC',
       },
       fontFamily: {
+        pixel: ['"Press Start 2P"', 'monospace'],
         fun: ['"Comic Neue"', 'cursive', 'sans-serif'],
       },
       keyframes: {
@@ -26,9 +40,26 @@ module.exports = {
           '50%': { transform: 'scaleY(0.8) rotate(-2deg)' },
           '100%': { transform: 'scaleY(1) rotate(2deg)' },
         },
+        bounce: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
       },
       animation: {
         crack: 'crack 0.6s ease-in-out',
+        bounce: 'bounce 2s infinite',
+        wiggle: 'wiggle 1s ease-in-out infinite',
+      },
+      boxShadow: {
+        'pixel': '4px 4px 0px rgba(0, 0, 0, 0.1)',
+        'pixel-lg': '6px 6px 0px rgba(0, 0, 0, 0.1)',
+      },
+      borderWidth: {
+        '3': '3px',
       },
     },
   },

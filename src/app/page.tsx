@@ -181,40 +181,40 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell">
+    <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b-2 border-yolk shadow-sm">
+      <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="text-4xl animate-crack">🥚</div>
-              <h1 className="text-2xl font-fun font-bold text-gray-800">
-                Eggconomy
+              <div className="text-4xl animate-bounce">🥚</div>
+              <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
+                EGGCONOMY
               </h1>
             </div>
             <div className="flex items-center space-x-3">
               {userSession?.isLoggedIn ? (
                 <>
-                  <span className="text-sm font-fun text-gray-600">
+                  <span className="text-sm font-fun text-egg-pixel-black">
                     Welcome, {userSession.name}!
                   </span>
-                  <Link href="/add" className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
-                    Add Your Eggs
+                  <Link href="/add" className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
+                    ADD EGGS
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-medium px-4 py-2 rounded-full transition-colors duration-200"
+                    className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
                   >
-                    Logout
+                    LOGOUT
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/add" className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
-                    Add Your Eggs
+                  <Link href="/add" className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
+                    ADD EGGS
                   </Link>
-                  <Link href="/login" className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-medium px-4 py-2 rounded-full transition-colors duration-200">
-                    Sign In
+                  <Link href="/login" className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200">
+                    SIGN IN
                   </Link>
                 </>
               )}
@@ -229,8 +229,8 @@ export default function Home() {
         <div className="mb-8 space-y-6">
           {/* Search Bar */}
           <div>
-            <label htmlFor="search" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-              🔍 Search for eggs, goods, or locations:
+            <label htmlFor="search" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+              🔍 SEARCH FOR EGGS, GOODS, OR LOCATIONS:
             </label>
             <div className="relative">
               <input
@@ -239,9 +239,9 @@ export default function Home() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="e.g., vegetables, bread, Berea, fresh eggs..."
-                className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                className="w-full px-4 py-3 pl-12 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
               />
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-egg-pixel-black">
                 🔍
               </div>
             </div>
@@ -249,14 +249,14 @@ export default function Home() {
 
           {/* Location Filter */}
           <div>
-            <label htmlFor="location" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-              📍 Filter by location:
+            <label htmlFor="location" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+              📍 FILTER BY LOCATION:
             </label>
             <select
               id="location"
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+              className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
             >
               <option value="">All locations</option>
               {uniqueLocations.map(location => (
@@ -269,22 +269,22 @@ export default function Home() {
 
           {/* Exchange Type Filter */}
           <div>
-            <h2 className="text-lg font-fun font-semibold text-gray-700 mb-4">
-              Browse by Exchange Type:
+            <h2 className="text-lg font-pixel font-semibold text-egg-pixel-black mb-4">
+              BROWSE BY EXCHANGE TYPE:
             </h2>
             <div className="flex flex-wrap gap-3">
               {(['all', 'gift', 'barter', 'cash', 'hybrid'] as ExchangeType[]).map((type) => (
                 <button
                   key={type}
                   onClick={() => handleFilterClick(type)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-full font-fun font-medium transition-all duration-200 ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-none border-2 border-egg-pixel-black font-pixel font-medium transition-all duration-200 shadow-pixel ${
                     filter === type
-                      ? 'bg-yolk text-gray-800 shadow-md scale-105'
-                      : 'bg-white/70 text-gray-600 hover:bg-white hover:shadow-sm'
+                      ? 'bg-egg-yolk text-egg-pixel-black shadow-pixel-lg scale-105'
+                      : 'bg-egg-white text-egg-pixel-black hover:bg-egg-yolkLight hover:shadow-pixel-lg'
                   }`}
                 >
                   <span className="text-lg">{getExchangeIcon(type)}</span>
-                  <span>{getExchangeLabel(type)}</span>
+                  <span>{getExchangeLabel(type).toUpperCase()}</span>
                 </button>
               ))}
             </div>
@@ -295,20 +295,20 @@ export default function Home() {
             <div className="flex justify-center">
               <button
                 onClick={clearFilters}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-medium px-6 py-2 rounded-full transition-colors duration-200"
+                className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-6 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
               >
-                🗑️ Clear All Filters
+                🗑️ CLEAR ALL FILTERS
               </button>
             </div>
           )}
 
           {/* Results Count */}
           <div className="text-center">
-            <p className="font-fun text-gray-600">
-              Found {filteredListings.length} egg listing{filteredListings.length !== 1 ? 's' : ''}
+            <p className="font-pixel text-egg-pixel-black">
+              FOUND {filteredListings.length} EGG LISTING{filteredListings.length !== 1 ? 'S' : ''}
               {(searchQuery || locationFilter || filter !== 'all') && (
-                <span className="text-yolk-dark">
-                  {' '}matching your search
+                <span className="text-egg-yolkDark">
+                  {' '}MATCHING YOUR SEARCH
                 </span>
               )}
             </p>
@@ -318,7 +318,7 @@ export default function Home() {
         {/* Loading Animation */}
         {isLoading && (
           <div className="flex justify-center items-center py-12">
-            <div className="text-6xl animate-crack">🥚</div>
+            <div className="text-6xl animate-wiggle">🥚</div>
           </div>
         )}
 
@@ -328,70 +328,70 @@ export default function Home() {
             {filteredListings.map((listing) => (
               <div
                 key={listing.id}
-                className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-200 border-l-4 border-yolk"
+                className="bg-egg-white/90 backdrop-blur-sm rounded-none p-6 shadow-pixel hover:shadow-pixel-lg transition-all duration-200 border-3 border-egg-yolk"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-3">
-                    <div className="text-2xl">{getExchangeIcon(listing.exchangeType)}</div>
+                    <div className="text-2xl animate-bounce">{getExchangeIcon(listing.exchangeType)}</div>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <h3 className="font-fun font-semibold text-lg text-gray-800">
-                          {listing.name}
+                        <h3 className="font-pixel font-semibold text-lg text-egg-pixel-black">
+                          {listing.name.toUpperCase()}
                         </h3>
                         {/* Show "New" badge for listings added in the last 24 hours */}
                         {new Date(listing.datePosted) > new Date(Date.now() - 24 * 60 * 60 * 1000) && (
-                          <span className="bg-blush text-white text-xs font-fun font-bold px-2 py-1 rounded-full">
+                          <span className="bg-blush text-egg-white text-xs font-pixel font-bold px-2 py-1 rounded-none border border-egg-pixel-black">
                             NEW
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600">{listing.location}</p>
+                      <p className="text-sm font-fun text-egg-pixel-black">{listing.location}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-fun font-bold text-xl text-yolk-dark">
-                      {listing.quantity} eggs
+                    <div className="font-pixel font-bold text-xl text-egg-yolkDark">
+                      {listing.quantity} EGGS
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs font-fun text-egg-pixel-black">
                       {new Date(listing.datePosted).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <p className="text-gray-700 font-fun">{listing.notes}</p>
+                  <p className="text-egg-pixel-black font-fun">{listing.notes}</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   {listing.exchangeType === 'barter' && listing.barterFor && (
-                    <span className="bg-grass/30 text-gray-700 px-3 py-1 rounded-full text-sm font-fun">
-                      Wants: {listing.barterFor}
+                    <span className="bg-grass/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                      WANTS: {listing.barterFor.toUpperCase()}
                     </span>
                   )}
                   {listing.exchangeType === 'cash' && listing.suggestedCash && (
-                    <span className="bg-sky/30 text-gray-700 px-3 py-1 rounded-full text-sm font-fun">
-                      {listing.suggestedCash}
+                    <span className="bg-sky/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                      {listing.suggestedCash.toUpperCase()}
                     </span>
                   )}
                   {listing.exchangeType === 'hybrid' && (
                     <>
                       {listing.barterFor && (
-                        <span className="bg-grass/30 text-gray-700 px-3 py-1 rounded-full text-sm font-fun">
-                          Trade: {listing.barterFor}
+                        <span className="bg-grass/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                          TRADE: {listing.barterFor.toUpperCase()}
                         </span>
                       )}
                       {listing.suggestedCash && (
-                        <span className="bg-sky/30 text-gray-700 px-3 py-1 rounded-full text-sm font-fun">
-                          Or: {listing.suggestedCash}
+                        <span className="bg-sky/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                          OR: {listing.suggestedCash.toUpperCase()}
                         </span>
                       )}
                     </>
                   )}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
-                  <button className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200">
-                    Crack a Deal! 🥚
+                <div className="mt-4 pt-3 border-t-2 border-egg-pixel-gray flex justify-between items-center">
+                  <button className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
+                    CRACK A DEAL! 🥚
                   </button>
                   
                   {/* Delete button - only show for logged-in user's own listings */}
@@ -400,10 +400,10 @@ export default function Home() {
                    listing.name === userSession.name && (
                     <button 
                       onClick={() => handleDeleteListing(listing.id)}
-                      className="bg-red-100 hover:bg-red-200 text-red-700 font-fun font-medium px-3 py-2 rounded-full transition-colors duration-200 text-sm"
+                      className="bg-red-100 hover:bg-red-200 text-red-700 font-pixel font-medium px-3 py-2 rounded-none border-2 border-red-700 shadow-pixel transition-all duration-200 text-sm"
                       title="Delete this listing"
                     >
-                      🗑️ Delete
+                      🗑️ DELETE
                     </button>
                   )}
                 </div>
@@ -415,11 +415,11 @@ export default function Home() {
         {/* Empty State */}
         {!isLoading && filteredListings.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🥚</div>
-            <h3 className="text-xl font-fun font-semibold text-gray-600 mb-2">
-              No eggs found
+            <div className="text-6xl mb-4 animate-bounce">🥚</div>
+            <h3 className="text-xl font-pixel font-semibold text-egg-pixel-black mb-2">
+              NO EGGS FOUND
             </h3>
-            <p className="text-gray-500 font-fun mb-4">
+            <p className="text-egg-pixel-black font-fun mb-4">
               {searchQuery || locationFilter || filter !== 'all' 
                 ? 'Try adjusting your search or filters!'
                 : 'Be the first to post some eggs!'
@@ -427,19 +427,19 @@ export default function Home() {
             </p>
             <Link 
               href="/add"
-              className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-6 py-3 rounded-full transition-colors duration-200 shadow-md inline-block"
+              className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block"
             >
-              Add Your Eggs! 🥚
+              ADD YOUR EGGS! 🥚
             </Link>
           </div>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="bg-white/80 backdrop-blur-sm border-t-2 border-yolk mt-12">
+      <footer className="bg-egg-white/90 backdrop-blur-sm border-t-3 border-egg-yolk mt-12 shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center">
-          <p className="font-fun text-gray-600">
-            🥚 Building community, one egg at a time 🥚
+          <p className="font-pixel text-egg-pixel-black">
+            🥚 BUILDING COMMUNITY, ONE EGG AT A TIME 🥚
           </p>
         </div>
       </footer>

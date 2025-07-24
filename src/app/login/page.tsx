@@ -50,29 +50,29 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell flex items-center justify-center">
-      <div className="bg-white/90 backdrop-blur-sm rounded-xl p-8 shadow-lg max-w-md w-full mx-4">
+    <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white flex items-center justify-center">
+      <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk max-w-md w-full mx-4">
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4 animate-crack">🥚</div>
-          <h2 className="text-3xl font-fun font-bold text-gray-800 mb-2">
-            Welcome to Eggconomy
+          <div className="text-6xl mb-4 animate-bounce">🥚</div>
+          <h2 className="text-3xl font-pixel font-bold text-egg-pixel-black mb-2">
+            WELCOME TO EGGCONOMY
           </h2>
-          <p className="text-gray-600 font-fun">
+          <p className="text-egg-pixel-black font-fun">
             Sign in to manage your egg listings
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg font-fun">
+            <div className="bg-red-100 border-2 border-red-400 text-red-700 px-4 py-3 rounded-none font-pixel">
               {error}
             </div>
           )}
 
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-              Your Name *
+            <label htmlFor="name" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+              YOUR NAME *
             </label>
             <input
               type="text"
@@ -81,15 +81,15 @@ export default function Login() {
               value={formData.name}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+              className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
               placeholder="e.g., Sarah from Berea"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-              Password *
+            <label htmlFor="password" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+              PASSWORD *
             </label>
             <input
               type="password"
@@ -98,7 +98,7 @@ export default function Login() {
               value={formData.password}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+              className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
               placeholder="Enter your password"
             />
           </div>
@@ -107,25 +107,25 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-4 rounded-lg font-fun font-semibold text-lg transition-all duration-200 ${
+            className={`w-full py-4 rounded-none font-pixel font-semibold text-lg transition-all duration-200 border-2 border-egg-pixel-black shadow-pixel ${
               isSubmitting
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-yolk hover:bg-yolk-dark text-gray-800 shadow-md hover:shadow-lg'
+                ? 'bg-egg-pixel-gray text-egg-pixel-black cursor-not-allowed'
+                : 'bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black hover:shadow-pixel-lg'
             }`}
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center space-x-2">
-                <div className="text-2xl animate-crack">🥚</div>
-                <span>Signing in...</span>
+                <div className="text-2xl animate-wiggle">🥚</div>
+                <span>SIGNING IN...</span>
               </div>
             ) : (
-              'Sign In 🥚'
+              'SIGN IN 🥚'
             )}
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-gray-600 font-fun text-sm">
+          <p className="text-egg-pixel-black font-fun text-sm">
             Don&apos;t have an account? Just use any name and password to get started!
           </p>
         </div>
@@ -133,9 +133,9 @@ export default function Login() {
         <div className="mt-6 text-center">
           <Link 
             href="/"
-            className="text-yolk-dark hover:text-yolk font-fun font-medium"
+            className="text-egg-yolkDark hover:text-egg-yolk font-pixel font-medium"
           >
-            ← Back to Home
+            ← BACK TO HOME
           </Link>
         </div>
       </div>

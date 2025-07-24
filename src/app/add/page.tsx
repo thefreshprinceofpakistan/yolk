@@ -94,20 +94,20 @@ export default function AddEggs() {
   // If not logged in, show login prompt
   if (!userSession?.isLoggedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell flex items-center justify-center">
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-8 shadow-lg text-center max-w-md mx-4">
-          <div className="text-6xl mb-4 animate-crack">🥚</div>
-          <h2 className="text-2xl font-fun font-bold text-gray-800 mb-4">
-            Sign In Required
+      <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white flex items-center justify-center">
+        <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel text-center max-w-md mx-4 border-3 border-egg-yolk">
+          <div className="text-6xl mb-4 animate-bounce">🥚</div>
+          <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
+            SIGN IN REQUIRED
           </h2>
-          <p className="text-gray-600 font-fun mb-6">
+          <p className="text-egg-pixel-black font-fun mb-6">
             Please sign in to add your egg listings!
           </p>
           <Link 
             href="/login"
-            className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-6 py-3 rounded-full transition-colors duration-200 shadow-md inline-block"
+            className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block"
           >
-            Sign In
+            SIGN IN
           </Link>
         </div>
       </div>
@@ -116,20 +116,20 @@ export default function AddEggs() {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell flex items-center justify-center">
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl p-8 shadow-lg text-center max-w-md mx-4">
-          <div className="text-6xl mb-4 animate-crack">🥚</div>
-          <h2 className="text-2xl font-fun font-bold text-gray-800 mb-4">
-            Eggs-cellent! 🎉
+      <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white flex items-center justify-center">
+        <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel text-center max-w-md mx-4 border-3 border-egg-yolk">
+          <div className="text-6xl mb-4 animate-bounce">🥚</div>
+          <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
+            EGGS-CELLENT! 🎉
           </h2>
-          <p className="text-gray-600 font-fun mb-6">
+          <p className="text-egg-pixel-black font-fun mb-6">
             Your egg listing has been posted! It will appear on the homepage shortly.
           </p>
           <Link 
             href="/"
-            className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-6 py-3 rounded-full transition-colors duration-200 shadow-md inline-block"
+            className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block"
           >
-            Back to Home
+            BACK TO HOME
           </Link>
         </div>
       </div>
@@ -137,22 +137,22 @@ export default function AddEggs() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell">
+    <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b-2 border-yolk shadow-sm">
+      <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="text-4xl animate-crack">🥚</div>
-              <h1 className="text-2xl font-fun font-bold text-gray-800">
-                Eggconomy
+              <div className="text-4xl animate-bounce">🥚</div>
+              <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
+                EGGCONOMY
               </h1>
             </Link>
             <Link 
               href="/"
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200"
+              className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
             >
-              ← Back to Home
+              ← BACK TO HOME
             </Link>
           </div>
         </div>
@@ -160,19 +160,19 @@ export default function AddEggs() {
 
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-4 py-8">
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg">
-          <h2 className="text-3xl font-fun font-bold text-gray-800 mb-2 text-center">
-            Add Your Eggs 🥚
+        <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk">
+          <h2 className="text-3xl font-pixel font-bold text-egg-pixel-black mb-2 text-center">
+            ADD YOUR EGGS 🥚
           </h2>
-          <p className="text-gray-600 font-fun text-center mb-8">
+          <p className="text-egg-pixel-black font-fun text-center mb-8">
             Share your fresh eggs with the community!
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name - pre-filled and read-only for logged-in users */}
             <div>
-              <label htmlFor="name" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                Your Name *
+              <label htmlFor="name" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                YOUR NAME *
               </label>
               <input
                 type="text"
@@ -182,18 +182,18 @@ export default function AddEggs() {
                 onChange={handleInputChange}
                 required
                 readOnly
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 font-fun"
+                className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-pixel-gray font-fun shadow-pixel"
                 placeholder="e.g., Sarah from Berea"
               />
-              <p className="text-xs text-gray-500 mt-1 font-fun">
+              <p className="text-xs text-egg-pixel-black mt-1 font-fun">
                 Your name is automatically filled from your account
               </p>
             </div>
 
             {/* Quantity */}
             <div>
-              <label htmlFor="quantity" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                Number of Eggs *
+              <label htmlFor="quantity" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                NUMBER OF EGGS *
               </label>
               <input
                 type="number"
@@ -203,15 +203,15 @@ export default function AddEggs() {
                 onChange={handleInputChange}
                 required
                 min="1"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                 placeholder="e.g., 12"
               />
             </div>
 
             {/* Exchange Type */}
             <div>
-              <label htmlFor="exchangeType" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                Exchange Type *
+              <label htmlFor="exchangeType" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                EXCHANGE TYPE *
               </label>
               <select
                 id="exchangeType"
@@ -219,20 +219,20 @@ export default function AddEggs() {
                 value={formData.exchangeType}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
               >
-                <option value="gift">🎁 Gift (Free)</option>
-                <option value="barter">🤝 Barter (Trade for something)</option>
-                <option value="cash">💵 Cash (Pay money)</option>
-                <option value="hybrid">🔄 Hybrid (Both barter and cash options)</option>
+                <option value="gift">🎁 GIFT (FREE)</option>
+                <option value="barter">🤝 BARTER (TRADE FOR SOMETHING)</option>
+                <option value="cash">💵 CASH (PAY MONEY)</option>
+                <option value="hybrid">🔄 HYBRID (BOTH BARTER AND CASH OPTIONS)</option>
               </select>
             </div>
 
             {/* Barter For */}
             {(formData.exchangeType === 'barter' || formData.exchangeType === 'hybrid') && (
               <div>
-                <label htmlFor="barterFor" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                  What would you like to trade for?
+                <label htmlFor="barterFor" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                  WHAT WOULD YOU LIKE TO TRADE FOR?
                 </label>
                 <input
                   type="text"
@@ -240,7 +240,7 @@ export default function AddEggs() {
                   name="barterFor"
                   value={formData.barterFor}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                  className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                   placeholder="e.g., Fresh vegetables, homemade bread, firewood"
                 />
               </div>
@@ -249,8 +249,8 @@ export default function AddEggs() {
             {/* Cash Price */}
             {(formData.exchangeType === 'cash' || formData.exchangeType === 'hybrid') && (
               <div>
-                <label htmlFor="suggestedCash" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                  Suggested Price
+                <label htmlFor="suggestedCash" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                  SUGGESTED PRICE
                 </label>
                 <input
                   type="text"
@@ -258,7 +258,7 @@ export default function AddEggs() {
                   name="suggestedCash"
                   value={formData.suggestedCash}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                  className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                   placeholder="e.g., $3/dozen"
                 />
               </div>
@@ -268,8 +268,8 @@ export default function AddEggs() {
             {(formData.exchangeType === 'cash' || formData.exchangeType === 'hybrid') && (
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="venmo" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                    Venmo Handle (optional)
+                  <label htmlFor="venmo" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                    VENMO HANDLE (OPTIONAL)
                   </label>
                   <input
                     type="text"
@@ -277,13 +277,13 @@ export default function AddEggs() {
                     name="venmo"
                     value={formData.venmo}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                    className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                     placeholder="e.g., @yourname"
                   />
                 </div>
                 <div>
-                  <label htmlFor="paypal" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                    PayPal Email (optional)
+                  <label htmlFor="paypal" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                    PAYPAL EMAIL (OPTIONAL)
                   </label>
                   <input
                     type="email"
@@ -291,7 +291,7 @@ export default function AddEggs() {
                     name="paypal"
                     value={formData.paypal}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                    className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                     placeholder="e.g., yourname@email.com"
                   />
                 </div>
@@ -300,8 +300,8 @@ export default function AddEggs() {
 
             {/* Location */}
             <div>
-              <label htmlFor="location" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                Location *
+              <label htmlFor="location" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                LOCATION *
               </label>
               <input
                 type="text"
@@ -310,15 +310,15 @@ export default function AddEggs() {
                 value={formData.location}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+                className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                 placeholder="e.g., Berea, KY"
               />
             </div>
 
             {/* Notes */}
             <div>
-              <label htmlFor="notes" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
-                Additional Notes (optional)
+              <label htmlFor="notes" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
+                ADDITIONAL NOTES (OPTIONAL)
               </label>
               <textarea
                 id="notes"
@@ -326,7 +326,7 @@ export default function AddEggs() {
                 value={formData.notes}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun resize-none"
+                className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk resize-none"
                 placeholder="e.g., Fresh from our backyard hens! Laid this morning. Perfect for baking."
               />
             </div>
@@ -335,19 +335,19 @@ export default function AddEggs() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-4 rounded-lg font-fun font-semibold text-lg transition-all duration-200 ${
+              className={`w-full py-4 rounded-none font-pixel font-semibold text-lg transition-all duration-200 border-2 border-egg-pixel-black shadow-pixel ${
                 isSubmitting
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-yolk hover:bg-yolk-dark text-gray-800 shadow-md hover:shadow-lg'
+                  ? 'bg-egg-pixel-gray text-egg-pixel-black cursor-not-allowed'
+                  : 'bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black hover:shadow-pixel-lg'
               }`}
             >
               {isSubmitting ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="text-2xl animate-crack">🥚</div>
-                  <span>Posting your eggs...</span>
+                  <div className="text-2xl animate-wiggle">🥚</div>
+                  <span>POSTING YOUR EGGS...</span>
                 </div>
               ) : (
-                'Post Your Eggs! 🥚'
+                'POST YOUR EGGS! 🥚'
               )}
             </button>
           </form>
