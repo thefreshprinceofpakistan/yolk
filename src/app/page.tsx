@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 // Mock data for egg listings
 const mockListings = [
@@ -102,9 +103,9 @@ export default function Home() {
                 Eggconomy
               </h1>
             </div>
-            <button className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
+            <Link href="/add" className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md">
               Add Your Eggs
-            </button>
+            </Link>
           </div>
         </div>
       </header>
