@@ -33,26 +33,42 @@ export default function AddEggs() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
+    // Create new listing object
+    const newListing = {
+      id: Date.now().toString(), // Simple ID generation
+      name: formData.name,
+      quantity: parseInt(formData.quantity),
+      exchangeType: formData.exchangeType,
+      barterFor: formData.barterFor || undefined,
+      suggestedCash: formData.suggestedCash || undefined,
+      paymentHandles: {
+        venmo: formData.venmo || undefined,
+        paypal: formData.paypal || undefined,
+      },
+      location: formData.location,
+      notes: formData.notes || undefined,
+      datePosted: new Date().toISOString().split('T')[0], // Today's date
+    };
+
+    // Save to localStorage
+    try {
+      const existingListings = localStorage.getItem('eggListings');
+      const savedListings = existingListings ? JSON.parse(existingListings) : [];
+      savedListings.push(newListing);
+      localStorage.setItem('eggListings', JSON.stringify(savedListings));
+    } catch (error) {
+      console.error('Error saving listing:', error);
+    }
+    
+    // Simulate form submission delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     setIsSubmitting(false);
     setShowSuccess(true);
     
-    // Reset form after 3 seconds
+    // Redirect to homepage after 3 seconds
     setTimeout(() => {
-      setShowSuccess(false);
-      setFormData({
-        name: '',
-        quantity: '',
-        exchangeType: 'gift',
-        barterFor: '',
-        suggestedCash: '',
-        venmo: '',
-        paypal: '',
-        location: '',
-        notes: '',
-      });
+      window.location.href = '/';
     }, 3000);
   };
 

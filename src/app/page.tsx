@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 // Mock data for egg listings
@@ -59,10 +59,24 @@ type ExchangeType = 'all' | 'gift' | 'barter' | 'cash' | 'hybrid';
 export default function Home() {
   const [filter, setFilter] = useState<ExchangeType>('all');
   const [isLoading, setIsLoading] = useState(false);
+  const [allListings, setAllListings] = useState(mockListings);
+
+  // Load user-submitted listings from localStorage on component mount
+  useEffect(() => {
+    const savedListings = localStorage.getItem('eggListings');
+    if (savedListings) {
+      try {
+        const parsedListings = JSON.parse(savedListings);
+        setAllListings([...mockListings, ...parsedListings]);
+      } catch (error) {
+        console.error('Error loading saved listings:', error);
+      }
+    }
+  }, []);
 
   const filteredListings = filter === 'all' 
-    ? mockListings 
-    : mockListings.filter(listing => listing.exchangeType === filter);
+    ? allListings 
+    : allListings.filter(listing => listing.exchangeType === filter);
 
   const getExchangeIcon = (type: string) => {
     switch (type) {
@@ -154,9 +168,17 @@ export default function Home() {
                   <div className="flex items-center space-x-3">
                     <div className="text-2xl">{getExchangeIcon(listing.exchangeType)}</div>
                     <div>
-                      <h3 className="font-fun font-semibold text-lg text-gray-800">
-                        {listing.name}
-                      </h3>
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-fun font-semibold text-lg text-gray-800">
+                          {listing.name}
+                        </h3>
+                        {/* Show "New" badge for listings added in the last 24 hours */}
+                        {new Date(listing.datePosted) > new Date(Date.now() - 24 * 60 * 60 * 1000) && (
+                          <span className="bg-blush text-white text-xs font-fun font-bold px-2 py-1 rounded-full">
+                            NEW
+                          </span>
+                        )}
+                      </div>
                       <p className="text-sm text-gray-600">{listing.location}</p>
                     </div>
                   </div>
