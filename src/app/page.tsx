@@ -477,7 +477,7 @@ export default function Home() {
 
       {/* Deal Modal */}
       {showDealModal && selectedDeal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-egg-white rounded-none border-3 border-egg-yolk shadow-pixel-lg max-w-md w-full p-6">
             <div className="text-center mb-6">
               <div className="text-4xl mb-4 animate-bounce">🥚</div>
@@ -491,7 +491,7 @@ export default function Home() {
 
             <div className="space-y-4 mb-6">
               {/* Deal Details */}
-              <div className="bg-egg-yolkLight/30 p-4 border-2 border-egg-yolk">
+              <div className="bg-egg-yolkLight/50 p-4 border-2 border-egg-yolk">
                 <h3 className="font-pixel font-semibold text-egg-pixel-black mb-2">
                   DEAL DETAILS:
                 </h3>
