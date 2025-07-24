@@ -61,6 +61,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [allListings, setAllListings] = useState(mockListings);
   const [userSession, setUserSession] = useState<{ name: string; isLoggedIn: boolean } | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
 
   // Load user session and listings from localStorage on component mount
   useEffect(() => {
@@ -87,9 +89,39 @@ export default function Home() {
     }
   }, []);
 
-  const filteredListings = filter === 'all' 
-    ? allListings 
-    : allListings.filter(listing => listing.exchangeType === filter);
+  // Get unique locations for filter dropdown
+  const uniqueLocations = Array.from(new Set(allListings.map(listing => listing.location))).sort();
+
+  // Filter listings based on search query, location, and exchange type
+  const filteredListings = allListings.filter(listing => {
+    // Exchange type filter
+    if (filter !== 'all' && listing.exchangeType !== filter) {
+      return false;
+    }
+
+    // Location filter
+    if (locationFilter && !listing.location.toLowerCase().includes(locationFilter.toLowerCase())) {
+      return false;
+    }
+
+    // Search query filter (searches in name, notes, barter items, and location)
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const searchableText = [
+        listing.name,
+        listing.notes,
+        listing.location,
+        listing.barterFor,
+        listing.suggestedCash
+      ].filter(Boolean).join(' ').toLowerCase();
+      
+      if (!searchableText.includes(query)) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   const getExchangeIcon = (type: string) => {
     switch (type) {
@@ -142,6 +174,12 @@ export default function Home() {
     setUserSession(null);
   };
 
+  const clearFilters = () => {
+    setSearchQuery('');
+    setLocationFilter('');
+    setFilter('all');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yolk-light to-shell">
       {/* Header */}
@@ -187,26 +225,93 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6">
-        {/* Filter Buttons */}
-        <div className="mb-8">
-          <h2 className="text-lg font-fun font-semibold text-gray-700 mb-4">
-            Browse by Exchange Type:
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {(['all', 'gift', 'barter', 'cash', 'hybrid'] as ExchangeType[]).map((type) => (
+        {/* Search and Filters */}
+        <div className="mb-8 space-y-6">
+          {/* Search Bar */}
+          <div>
+            <label htmlFor="search" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
+              🔍 Search for eggs, goods, or locations:
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="e.g., vegetables, bread, Berea, fresh eggs..."
+                className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+              />
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                🔍
+              </div>
+            </div>
+          </div>
+
+          {/* Location Filter */}
+          <div>
+            <label htmlFor="location" className="block text-sm font-fun font-semibold text-gray-700 mb-2">
+              📍 Filter by location:
+            </label>
+            <select
+              id="location"
+              value={locationFilter}
+              onChange={(e) => setLocationFilter(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yolk focus:border-transparent font-fun"
+            >
+              <option value="">All locations</option>
+              {uniqueLocations.map(location => (
+                <option key={location} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Exchange Type Filter */}
+          <div>
+            <h2 className="text-lg font-fun font-semibold text-gray-700 mb-4">
+              Browse by Exchange Type:
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {(['all', 'gift', 'barter', 'cash', 'hybrid'] as ExchangeType[]).map((type) => (
+                <button
+                  key={type}
+                  onClick={() => handleFilterClick(type)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-full font-fun font-medium transition-all duration-200 ${
+                    filter === type
+                      ? 'bg-yolk text-gray-800 shadow-md scale-105'
+                      : 'bg-white/70 text-gray-600 hover:bg-white hover:shadow-sm'
+                  }`}
+                >
+                  <span className="text-lg">{getExchangeIcon(type)}</span>
+                  <span>{getExchangeLabel(type)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Clear Filters Button */}
+          {(searchQuery || locationFilter || filter !== 'all') && (
+            <div className="flex justify-center">
               <button
-                key={type}
-                onClick={() => handleFilterClick(type)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full font-fun font-medium transition-all duration-200 ${
-                  filter === type
-                    ? 'bg-yolk text-gray-800 shadow-md scale-105'
-                    : 'bg-white/70 text-gray-600 hover:bg-white hover:shadow-sm'
-                }`}
+                onClick={clearFilters}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-fun font-medium px-6 py-2 rounded-full transition-colors duration-200"
               >
-                <span className="text-lg">{getExchangeIcon(type)}</span>
-                <span>{getExchangeLabel(type)}</span>
+                🗑️ Clear All Filters
               </button>
-            ))}
+            </div>
+          )}
+
+          {/* Results Count */}
+          <div className="text-center">
+            <p className="font-fun text-gray-600">
+              Found {filteredListings.length} egg listing{filteredListings.length !== 1 ? 's' : ''}
+              {(searchQuery || locationFilter || filter !== 'all') && (
+                <span className="text-yolk-dark">
+                  {' '}matching your search
+                </span>
+              )}
+            </p>
           </div>
         </div>
 
@@ -312,11 +417,20 @@ export default function Home() {
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🥚</div>
             <h3 className="text-xl font-fun font-semibold text-gray-600 mb-2">
-              No eggs found for this filter
+              No eggs found
             </h3>
-            <p className="text-gray-500 font-fun">
-              Try selecting a different exchange type or check back later!
+            <p className="text-gray-500 font-fun mb-4">
+              {searchQuery || locationFilter || filter !== 'all' 
+                ? 'Try adjusting your search or filters!'
+                : 'Be the first to post some eggs!'
+              }
             </p>
+            <Link 
+              href="/add"
+              className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-6 py-3 rounded-full transition-colors duration-200 shadow-md inline-block"
+            >
+              Add Your Eggs! 🥚
+            </Link>
           </div>
         )}
       </main>
