@@ -215,7 +215,7 @@ export default function AdminDashboard() {
                 </label>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) => setSortBy(e.target.value as 'name' | 'createdAt' | 'lastLogin' | 'listingsCount')}
                   className="px-4 py-2 border-2 border-gray-300 rounded-full font-fun focus:outline-none focus:border-yolk"
                 >
                   <option value="createdAt">Date Created</option>
