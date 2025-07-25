@@ -265,7 +265,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white">
+    <div className="min-h-screen bg-[#FFCF08]">
       {/* Header */}
       <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-4">
