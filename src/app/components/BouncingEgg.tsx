@@ -12,8 +12,8 @@ export default function BouncingEgg({ size = 'md', className = '' }: BouncingEgg
   const [isAnimating, setIsAnimating] = useState(false);
 
   const images = [
-    '/Adobe Express - file.png', // Raw egg
-    '/download-removebg-preview.png' // Fried egg
+    '/raw-egg.png', // Raw egg
+    '/fried-egg.png' // Fried egg
   ];
 
   const sizeClasses = {
