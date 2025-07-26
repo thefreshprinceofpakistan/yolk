@@ -55,7 +55,7 @@ const mockListings = [
   },
 ];
 
-type ExchangeType = 'all' | 'gift' | 'barter' | 'cash' | 'hybrid';
+type ExchangeType = 'all' | 'gift' | 'barter' | 'cash';
 
 type Listing = {
   id: string;
@@ -139,8 +139,16 @@ export default function Home() {
   // Filter listings based on search query, location, and exchange type
   const filteredListings = allListings.filter(listing => {
     // Exchange type filter
-    if (filter !== 'all' && listing.exchangeType !== filter) {
-      return false;
+    if (filter !== 'all') {
+      if (filter === 'barter' && listing.exchangeType !== 'barter' && listing.exchangeType !== 'hybrid') {
+        return false;
+      }
+      if (filter === 'cash' && listing.exchangeType !== 'cash' && listing.exchangeType !== 'hybrid') {
+        return false;
+      }
+      if (filter === 'gift' && listing.exchangeType !== 'gift') {
+        return false;
+      }
     }
 
     // Location filter
@@ -169,11 +177,32 @@ export default function Home() {
 
   const getExchangeIcon = (type: string) => {
     switch (type) {
-      case 'gift': return '🎁';
+      case 'gift': return '/pixil-frame-0 (6).png'; // Gift box
       case 'barter': return '🤝';
-      case 'cash': return '💵';
+      case 'cash': return '/pixil-frame-0 (7).png'; // Cash/money
       case 'hybrid': return '🔄';
-      default: return '🥚';
+      default: return '/pixil-frame-0-trimmed.png'; // Raw egg pixel art (trimmed)
+    }
+  };
+
+  const renderExchangeIcon = (type: string, size: string = 'text-lg') => {
+    const icon = getExchangeIcon(type);
+    if (icon.startsWith('/')) {
+      // It's an image path
+      const isCash = type === 'cash';
+      const isGift = type === 'gift';
+      return (
+        <Image
+          src={icon}
+          alt={`${type} icon`}
+          width={isCash ? 40 : isGift ? 28 : 20}
+          height={isCash ? 40 : isGift ? 28 : 20}
+          className={`${size} object-contain`}
+        />
+      );
+    } else {
+      // It's an emoji
+      return <span className={size}>{icon}</span>;
     }
   };
 
@@ -382,7 +411,7 @@ export default function Home() {
               BROWSE BY EXCHANGE TYPE:
             </h2>
             <div className="flex flex-wrap gap-3">
-              {(['all', 'gift', 'barter', 'cash', 'hybrid'] as ExchangeType[]).map((type) => (
+              {(['all', 'gift', 'barter', 'cash'] as ExchangeType[]).map((type) => (
                 <button
                   key={type}
                   onClick={() => handleFilterClick(type)}
@@ -392,7 +421,7 @@ export default function Home() {
                       : 'bg-egg-white text-egg-pixel-black hover:bg-egg-yolkLight hover:shadow-pixel-lg'
                   }`}
                 >
-                  <span className="text-lg">{getExchangeIcon(type)}</span>
+                  {renderExchangeIcon(type, 'text-lg')}
                   <span>{getExchangeLabel(type).toUpperCase()}</span>
                 </button>
               ))}
@@ -427,7 +456,15 @@ export default function Home() {
         {/* Loading Animation */}
         {isLoading && (
           <div className="flex justify-center items-center py-12">
-            <div className="text-6xl animate-wiggle">🥚</div>
+            <div className="animate-wiggle">
+              <Image
+                src="/pixil-frame-0-trimmed.png"
+                alt="Loading egg"
+                width={96}
+                height={96}
+                className="w-24 h-24 object-contain"
+              />
+            </div>
           </div>
         )}
 
@@ -441,7 +478,9 @@ export default function Home() {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-3">
-                    <div className="text-2xl animate-bounce">{getExchangeIcon(listing.exchangeType)}</div>
+                    <div>
+                      {renderExchangeIcon(listing.exchangeType, 'text-2xl')}
+                    </div>
                     <div>
                       <div className="flex items-center space-x-2">
                         <h3 className="font-pixel font-semibold text-lg text-egg-pixel-black">
@@ -527,7 +566,15 @@ export default function Home() {
         {/* Empty State */}
         {!isLoading && filteredListings.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4 animate-bounce">🥚</div>
+            <div className="mb-4 animate-bounce">
+              <Image
+                src="/pixil-frame-0-trimmed.png"
+                alt="No eggs found"
+                width={96}
+                height={96}
+                className="w-24 h-24 object-contain"
+              />
+            </div>
             <h3 className="text-xl font-pixel font-semibold text-egg-pixel-black mb-2">
               NO EGGS FOUND
             </h3>
@@ -561,7 +608,15 @@ export default function Home() {
         <div className="fixed inset-0 bg-black flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-none border-3 border-egg-yolk shadow-pixel-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="text-center mb-6">
-              <div className="text-4xl mb-4 animate-bounce">🥚</div>
+              <div className="mb-4 animate-bounce">
+                <Image
+                  src="/pixil-frame-0-trimmed.png"
+                  alt="Crack a deal"
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 object-contain"
+                />
+              </div>
               <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-2">
                 CRACK A DEAL!
               </h2>
@@ -769,7 +824,15 @@ export default function Home() {
                     >
                       {isSendingMessage ? (
                         <div className="flex items-center justify-center space-x-2">
-                          <div className="text-2xl animate-wiggle">🥚</div>
+                          <div className="animate-wiggle">
+                            <Image
+                              src="/pixil-frame-0-trimmed.png"
+                              alt="Sending"
+                              width={32}
+                              height={32}
+                              className="w-8 h-8 object-contain"
+                            />
+                          </div>
                           <span>SENDING...</span>
                         </div>
                       ) : (
