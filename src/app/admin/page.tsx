@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface UserAccount {
   name: string;
@@ -132,7 +133,15 @@ export default function AdminDashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#FFCF08] flex items-center justify-center">
-        <div className="text-6xl animate-bounce">🥚</div>
+        <div className="animate-bounce">
+          <Image
+            src="/pixil-frame-0 (9).png"
+            alt="Loading"
+            width={96}
+            height={96}
+            className="w-24 h-24 object-contain"
+          />
+        </div>
       </div>
     );
   }
@@ -144,7 +153,15 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="text-4xl">🥚</div>
+              <div>
+                <Image
+                  src="/pixil-frame-0 (9).png"
+                  alt="Admin"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain"
+                />
+              </div>
               <h1 className="text-2xl font-fun font-bold text-gray-800">
                 Eggconomy Admin Dashboard
               </h1>
@@ -323,7 +340,15 @@ export default function AdminDashboard() {
           </div>
           {sortedAccounts.length === 0 && (
             <div className="text-center py-8">
-              <div className="text-4xl mb-2">🥚</div>
+              <div className="mb-2">
+                <Image
+                  src="/pixil-frame-0 (9).png"
+                  alt="No users"
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 object-contain"
+                />
+              </div>
               <p className="text-gray-500 font-fun">No users found</p>
             </div>
           )}

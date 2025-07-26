@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 type ExchangeType = 'gift' | 'barter' | 'cash' | 'hybrid';
 
@@ -96,12 +97,20 @@ export default function AddEggs() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white flex items-center justify-center">
         <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel text-center max-w-md mx-4 border-3 border-egg-yolk">
-          <div className="text-6xl mb-4 animate-bounce">🥚</div>
+          <div className="flex justify-center items-center mb-4" style={{ animation: 'wobble 2s ease-in-out infinite' }}>
+            <Image
+              src="/pixil-frame-0 (9).png"
+              alt="Sign in required"
+              width={96}
+              height={96}
+              className="w-24 h-24 object-contain"
+            />
+          </div>
           <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
             SIGN IN REQUIRED
           </h2>
           <p className="text-egg-pixel-black font-fun mb-6">
-            Please sign in to add your egg listings!
+            Please sign in to add your listings!
           </p>
           <Link 
             href="/login"
@@ -118,7 +127,15 @@ export default function AddEggs() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white flex items-center justify-center">
         <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel text-center max-w-md mx-4 border-3 border-egg-yolk">
-          <div className="text-6xl mb-4 animate-bounce">🥚</div>
+          <div className="mb-4 animate-bounce">
+            <Image
+              src="/pixil-frame-0 (9).png"
+              alt="Success"
+              width={96}
+              height={96}
+              className="w-24 h-24 object-contain"
+            />
+          </div>
           <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
             EGGS-CELLENT! 🎉
           </h2>
@@ -143,7 +160,15 @@ export default function AddEggs() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="text-4xl animate-bounce">🥚</div>
+              <div className="animate-bounce">
+                <Image
+                  src="/pixil-frame-0 (9).png"
+                  alt="Eggconomy"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain"
+                />
+              </div>
               <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
                 EGGCONOMY
               </h1>
@@ -161,8 +186,15 @@ export default function AddEggs() {
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-4 py-8">
         <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk">
-          <h2 className="text-3xl font-pixel font-bold text-egg-pixel-black mb-2 text-center">
-            ADD YOUR EGGS 🥚
+          <h2 className="text-3xl font-pixel font-bold text-egg-pixel-black mb-2 text-center flex items-center justify-center space-x-2">
+            <span>ADD YOUR EGGS</span>
+            <Image
+              src="/pixil-frame-0 (9).png"
+              alt="Add eggs"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain"
+            />
           </h2>
           <p className="text-egg-pixel-black font-fun text-center mb-8">
             Share your fresh eggs with the community!
@@ -343,11 +375,28 @@ export default function AddEggs() {
             >
               {isSubmitting ? (
                 <div className="flex items-center justify-center space-x-2">
-                  <div className="text-2xl animate-wiggle">🥚</div>
+                  <div className="text-2xl animate-wiggle">
+                    <Image
+                      src="/pixil-frame-0 (9).png"
+                      alt="Posting"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 object-contain"
+                    />
+                  </div>
                   <span>POSTING YOUR EGGS...</span>
                 </div>
               ) : (
-                'POST YOUR EGGS! 🥚'
+                <div className="flex items-center space-x-2">
+                  <span>POST YOUR EGGS!</span>
+                  <Image
+                    src="/pixil-frame-0 (9).png"
+                    alt="Post eggs"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 object-contain"
+                  />
+                </div>
               )}
             </button>
           </form>

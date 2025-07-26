@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,21 @@ export default function Login() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [currentEggFrame, setCurrentEggFrame] = useState(0);
+
+  // Array of egg GIF frames
+  const eggFrames = [
+    '/egg gif 1.png', '/egg gif 2.png', '/egg gif 3.png', '/egg gif 4.png', '/egg gif 5.png'
+  ];
+
+  // Cycle through egg frames every 500ms
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentEggFrame(prev => (prev + 1) % eggFrames.length);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [eggFrames.length]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,12 +69,20 @@ export default function Login() {
     <div className="min-h-screen bg-[#FFCF08] flex items-center justify-center">
       <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk max-w-md w-full mx-4">
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4 animate-bounce">🥚</div>
+          <div className="flex justify-center items-center" style={{ animation: 'wobble 2s ease-in-out infinite' }}>
+            <Image
+              src={eggFrames[currentEggFrame]}
+              alt="Welcome to Eggconomy"
+              width={96}
+              height={96}
+              className="w-24 h-24 object-contain"
+            />
+          </div>
           <h2 className="text-3xl font-pixel font-bold text-egg-pixel-black mb-2">
             WELCOME TO EGGCONOMY
           </h2>
           <p className="text-egg-pixel-black font-fun">
-            Sign in to manage your egg listings
+            Sign in to manage your listings and trades
           </p>
         </div>
 
@@ -115,11 +139,28 @@ export default function Login() {
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center space-x-2">
-                <div className="text-2xl animate-wiggle">🥚</div>
+                <div className="animate-wiggle">
+                  <Image
+                    src="/pixil-frame-0 (9).png"
+                    alt="Signing in"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 object-contain"
+                  />
+                </div>
                 <span>SIGNING IN...</span>
               </div>
             ) : (
-              'SIGN IN 🥚'
+              <div className="flex items-center justify-center space-x-2">
+                <span>SIGN IN</span>
+                <Image
+                  src="/pixil-frame-0 (9).png"
+                  alt="Sign in"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
+              </div>
             )}
           </button>
         </form>

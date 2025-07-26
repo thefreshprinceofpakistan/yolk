@@ -38,21 +38,6 @@ const mockListings = [
     notes: 'Small batch, very fresh. Perfect for baking!',
     datePosted: '2024-01-13',
   },
-  {
-    id: '4',
-    name: 'The Johnson Family',
-    quantity: 18,
-    exchangeType: 'hybrid' as const,
-    barterFor: 'Firewood or help with yard work',
-    suggestedCash: '$4/dozen',
-    paymentHandles: {
-      venmo: '@johnsonfarm',
-      paypal: 'johnsonfarm@email.com',
-    },
-    location: 'Lancaster, KY',
-    notes: 'Large brown eggs from happy hens. Will trade or sell!',
-    datePosted: '2024-01-12',
-  },
 ];
 
 type ExchangeType = 'all' | 'gift' | 'barter' | 'cash';
@@ -95,7 +80,7 @@ export default function Home() {
 
   // Array of just two pixel art frame images to alternate between
   const pixelFrames = [
-    '/pixil-frame-0.png',        // Raw egg
+    '/pixil-frame-0 (9).png',        // Raw egg
     '/pixil-frame-0 (5)-trimmed.png'     // Fried egg (trimmed)
   ];
 
@@ -178,10 +163,10 @@ export default function Home() {
   const getExchangeIcon = (type: string) => {
     switch (type) {
       case 'gift': return '/pixil-frame-0 (6).png'; // Gift box
-      case 'barter': return '🤝';
+      case 'barter': return '/Adobe Express - file (1).png'; // Handshake
       case 'cash': return '/pixil-frame-0 (7).png'; // Cash/money
       case 'hybrid': return '🔄';
-      default: return '/pixil-frame-0-trimmed.png'; // Raw egg pixel art (trimmed)
+      default: return '/pixil-frame-0 (9).png'; // Raw egg pixel art
     }
   };
 
@@ -191,12 +176,13 @@ export default function Home() {
       // It's an image path
       const isCash = type === 'cash';
       const isGift = type === 'gift';
+      const isBarter = type === 'barter';
       return (
         <Image
           src={icon}
           alt={`${type} icon`}
-          width={isCash ? 40 : isGift ? 28 : 20}
-          height={isCash ? 40 : isGift ? 28 : 20}
+          width={isCash ? 40 : isGift || isBarter ? 28 : 20}
+          height={isCash ? 40 : isGift || isBarter ? 28 : 20}
           className={`${size} object-contain`}
         />
       );
@@ -368,7 +354,16 @@ export default function Home() {
           {/* Search Bar */}
           <div>
             <label htmlFor="search" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
-              🔍 SEARCH FOR EGGS, GOODS, OR LOCATIONS:
+              <div className="flex items-center space-x-2">
+                <Image
+                  src="/Adobe Express - file (2).png"
+                  alt="Search"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
+                <span>SEARCH FOR EGGS, GOODS, OR LOCATIONS:</span>
+              </div>
             </label>
             <div className="relative">
               <input
@@ -379,8 +374,14 @@ export default function Home() {
                 placeholder="e.g., vegetables, bread, Berea, fresh eggs..."
                 className="w-full px-4 py-3 pl-12 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
               />
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-egg-pixel-black">
-                🔍
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <Image
+                  src="/Adobe Express - file (2).png"
+                  alt="Search"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
               </div>
             </div>
           </div>
@@ -388,7 +389,16 @@ export default function Home() {
           {/* Location Filter */}
           <div>
             <label htmlFor="location" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
-              📍 FILTER BY LOCATION:
+              <div className="flex items-center space-x-2">
+                <Image
+                  src="/Adobe Express - file (3).png"
+                  alt="Location"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
+                <span>FILTER BY LOCATION:</span>
+              </div>
             </label>
             <select
               id="location"
@@ -458,7 +468,7 @@ export default function Home() {
           <div className="flex justify-center items-center py-12">
             <div className="animate-wiggle">
               <Image
-                src="/pixil-frame-0-trimmed.png"
+                src="/pixil-frame-0 (9).png"
                 alt="Loading egg"
                 width={96}
                 height={96}
@@ -542,7 +552,16 @@ export default function Home() {
                     onClick={() => handleCrackDeal(listing)}
                     className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
                   >
-                    CRACK A DEAL! 🥚
+                    <div className="flex items-center space-x-2">
+                      <span>CRACK A DEAL!</span>
+                      <Image
+                        src="/pixil-frame-0 (9).png"
+                        alt="Deal"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 object-contain"
+                      />
+                    </div>
                   </button>
                   
                   {/* Delete button - only show for logged-in user's own listings */}
@@ -568,7 +587,7 @@ export default function Home() {
           <div className="text-center py-12">
             <div className="mb-4 animate-bounce">
               <Image
-                src="/pixil-frame-0-trimmed.png"
+                src="/pixil-frame-0 (9).png"
                 alt="No eggs found"
                 width={96}
                 height={96}
@@ -588,7 +607,16 @@ export default function Home() {
               href="/add"
               className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block"
             >
-              ADD YOUR EGGS! 🥚
+              <div className="flex items-center space-x-2">
+                <span>ADD YOUR EGGS!</span>
+                <Image
+                  src="/pixil-frame-0 (9).png"
+                  alt="Add eggs"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
+              </div>
             </Link>
           </div>
         )}
@@ -597,8 +625,22 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-egg-white/90 backdrop-blur-sm border-t-3 border-egg-yolk mt-12 shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center">
-          <p className="font-pixel text-egg-pixel-black">
-            🥚 BUILDING COMMUNITY, ONE EGG AT A TIME 🥚
+          <p className="font-pixel text-egg-pixel-black flex items-center justify-center space-x-2">
+            <Image
+              src="/pixil-frame-0 (9).png"
+              alt="Egg"
+              width={20}
+              height={20}
+              className="w-5 h-5 object-contain"
+            />
+            <span>BUILDING COMMUNITY, ONE EGG AT A TIME</span>
+            <Image
+              src="/pixil-frame-0 (9).png"
+              alt="Egg"
+              width={20}
+              height={20}
+              className="w-5 h-5 object-contain"
+            />
           </p>
         </div>
       </footer>
@@ -610,7 +652,7 @@ export default function Home() {
             <div className="text-center mb-6">
               <div className="mb-4 animate-bounce">
                 <Image
-                  src="/pixil-frame-0-trimmed.png"
+                  src="/pixil-frame-0 (9).png"
                   alt="Crack a deal"
                   width={64}
                   height={64}
@@ -826,7 +868,7 @@ export default function Home() {
                         <div className="flex items-center justify-center space-x-2">
                           <div className="animate-wiggle">
                             <Image
-                              src="/pixil-frame-0-trimmed.png"
+                              src="/pixil-frame-0 (9).png"
                               alt="Sending"
                               width={32}
                               height={32}
