@@ -37,8 +37,8 @@ export default function HowToUse() {
           <div className="bg-egg-white/80 p-4 border-2 border-egg-yolk rounded-none">
             <h4 className="font-pixel font-semibold mb-2">🔍 Search Features:</h4>
             <ul className="font-fun space-y-1 text-sm">
-              <li>• Search by location (e.g., "Berea, KY")</li>
-              <li>• Search by items you want to trade (e.g., "vegetables", "bread")</li>
+              <li>• Search by location (e.g., &quot;Berea, KY&quot;)</li>
+              <li>• Search by items you want to trade (e.g., &quot;vegetables&quot;, &quot;bread&quot;)</li>
               <li>• Filter by exchange type: Gift, Barter, or Cash</li>
               <li>• See how many eggs are available</li>
             </ul>
@@ -115,7 +115,7 @@ export default function HowToUse() {
             </p>
           </div>
           <div className="bg-egg-white/80 p-4 border-2 border-egg-yolk rounded-none">
-            <h4 className="font-pixel font-semibold mb-2">Step 2: Click "CRACK A DEAL!"</h4>
+            <h4 className="font-pixel font-semibold mb-2">Step 2: Click &quot;CRACK A DEAL!&quot;</h4>
             <p className="font-fun text-sm mb-3">
               This opens a detailed view with contact information and payment methods.
             </p>
@@ -144,14 +144,14 @@ export default function HowToUse() {
           <div className="bg-egg-white/80 p-4 border-2 border-egg-yolk rounded-none">
             <h4 className="font-pixel font-semibold mb-2">Step 1: Sign In</h4>
             <p className="font-fun text-sm mb-3">
-              Click "SIGN IN" in the top right. You can use any name and password 
+              Click &quot;SIGN IN&quot; in the top right. You can use any name and password 
               to get started - no email required!
             </p>
           </div>
           <div className="bg-egg-white/80 p-4 border-2 border-egg-yolk rounded-none">
             <h4 className="font-pixel font-semibold mb-2">Step 2: Add Your Eggs</h4>
             <p className="font-fun text-sm mb-3">
-              Click "ADD EGGS" and fill out the form with:
+              Click &quot;ADD EGGS&quot; and fill out the form with:
             </p>
             <ul className="font-fun text-sm space-y-1 ml-4">
               <li>• How many eggs you have</li>
@@ -163,7 +163,7 @@ export default function HowToUse() {
           <div className="bg-egg-white/80 p-4 border-2 border-egg-yolk rounded-none">
             <h4 className="font-pixel font-semibold mb-2">Step 3: Respond to Messages</h4>
             <p className="font-fun text-sm">
-              When someone is interested in your eggs, they'll send you a message. 
+              When someone is interested in your eggs, they&apos;ll send you a message. 
               Reply to arrange pickup details!
             </p>
           </div>
@@ -180,7 +180,7 @@ export default function HowToUse() {
             <ul className="font-fun text-sm space-y-1 text-green-800">
               <li>• Meet in public places or well-lit areas</li>
               <li>• Bring a friend if meeting someone new</li>
-              <li>• Trust your instincts - if something feels off, don't proceed</li>
+              <li>• Trust your instincts - if something feels off, don&apos;t proceed</li>
               <li>• Exchange during daylight hours when possible</li>
             </ul>
           </div>
