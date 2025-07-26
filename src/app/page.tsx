@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Mock data for egg listings
 const mockListings = [
@@ -90,6 +91,13 @@ export default function Home() {
   });
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
+
+  // Array of just two pixel art frame images to alternate between
+  const pixelFrames = [
+    '/pixil-frame-0.png',        // Raw egg
+    '/pixil-frame-0 (5)-trimmed.png'     // Fried egg (trimmed)
+  ];
 
   // Load user session and listings from localStorage on component mount
   useEffect(() => {
@@ -104,17 +112,26 @@ export default function Home() {
       }
     }
 
-    // Load user-submitted listings
+    // Load saved listings
     const savedListings = localStorage.getItem('eggListings');
     if (savedListings) {
       try {
-        const parsedListings = JSON.parse(savedListings);
-        setAllListings([...mockListings, ...parsedListings]);
+        const listings = JSON.parse(savedListings);
+        setAllListings([...mockListings, ...listings]);
       } catch (error) {
-        console.error('Error loading saved listings:', error);
+        console.error('Error loading listings:', error);
       }
     }
   }, []);
+
+  // Switch images on each bounce (every 1 second)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFrameIndex(prev => (prev + 1) % pixelFrames.length);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [pixelFrames.length]);
 
   // Get unique locations for filter dropdown
   const uniqueLocations = Array.from(new Set(allListings.map(listing => listing.location))).sort();
@@ -271,7 +288,15 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="text-4xl animate-bounce">🥚</div>
+              <div className="animate-bounce w-25 h-25 flex items-center justify-center">
+                <Image
+                  src={pixelFrames[currentFrameIndex]}
+                  alt="Egg animation frame"
+                  width={100}
+                  height={100}
+                  className="w-25 h-25 object-contain"
+                />
+              </div>
               <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
                 EGGCONOMY
               </h1>
