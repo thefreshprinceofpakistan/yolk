@@ -312,9 +312,14 @@ export default function Home() {
                   className="w-25 h-25 object-contain"
                 />
               </div>
-              <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
-                EGGCONOMY
-              </h1>
+              <div>
+                <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
+                  EGGCONOMY
+                </h1>
+                <p className="text-sm font-fun text-egg-yolkDark">
+                  Cheaper, Better, More Together
+                </p>
+              </div>
             </div>
             <div className="flex items-center space-x-3">
               {userSession?.isLoggedIn ? (
@@ -324,6 +329,9 @@ export default function Home() {
                   </span>
                   <Link href="/add" className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
                     ADD EGGS
+                  </Link>
+                  <Link href="/mission" className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200">
+                    MISSION
                   </Link>
                   <button 
                     onClick={handleLogout}
@@ -336,6 +344,9 @@ export default function Home() {
                 <>
                   <Link href="/add" className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
                     ADD EGGS
+                  </Link>
+                  <Link href="/mission" className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200">
+                    MISSION
                   </Link>
                   <Link href="/login" className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200">
                     SIGN IN

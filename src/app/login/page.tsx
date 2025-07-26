@@ -79,7 +79,7 @@ export default function Login() {
             />
           </div>
           <h2 className="text-3xl font-pixel font-bold text-egg-pixel-black mb-2">
-            WELCOME TO EGGCONOMY
+            WELCOME TO THE EGGCONOMY
           </h2>
           <p className="text-egg-pixel-black font-fun">
             Sign in to manage your listings and trades
