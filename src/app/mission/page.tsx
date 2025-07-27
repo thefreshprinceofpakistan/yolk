@@ -28,9 +28,9 @@ export default function Mission() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="animate-bounce">
+              <div>
                 <Image
-                  src="/pixil-frame-0 (9).png"
+                  src="/pixil-frame-0 (5)-trimmed.png"
                   alt="Eggconomy"
                   width={48}
                   height={48}
@@ -246,7 +246,7 @@ export default function Mission() {
               &quot;The best eggs come from happy hens, and the best communities come from happy neighbors.&quot;
             </p>
             <p className="font-fun text-egg-yolkDark mt-2">
-              — The Eggconomy Community
+              : The Eggconomy Community
             </p>
           </div>
         </div>
