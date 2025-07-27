@@ -12,17 +12,29 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Force all text to stay black regardless of system preferences */
+* {
+  color: inherit;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: #2D2D2D !important; /* Force black text */
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Ensure all text elements stay black */
+h1, h2, h3, h4, h5, h6, p, span, div, label, input, textarea, select, button, a {
+  color: #2D2D2D !important;
+}
+
+/* Override any potential dark mode text colors */
+.text-egg-pixel-black {
+  color: #2D2D2D !important;
+}
+
+.text-egg-yolkDark {
+  color: #e68a00 !important;
 }
 
 @keyframes wobble {

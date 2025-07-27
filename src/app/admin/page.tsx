@@ -178,14 +178,14 @@ export default function AdminDashboard() {
                   className="w-12 h-12 object-contain"
                 />
               </div>
-              <h1 className="text-2xl font-fun font-bold text-gray-800">
+              <h1 className="text-2xl font-fun font-bold text-egg-pixel-black">
                 Eggconomy Admin Dashboard
               </h1>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={loadData}
-                className="bg-yolk hover:bg-yolk-dark text-gray-800 font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md"
+                className="bg-yolk hover:bg-yolk-dark text-egg-pixel-black font-fun font-semibold px-4 py-2 rounded-full transition-colors duration-200 shadow-md"
               >
                 Refresh Data
               </button>
@@ -206,23 +206,23 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-blue-500">
             <div className="text-2xl font-fun font-bold text-blue-600">{stats.totalUsers}</div>
-            <div className="text-sm text-gray-600 font-fun">Total Users</div>
+            <div className="text-sm text-egg-pixel-black font-fun">Total Users</div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-green-500">
             <div className="text-2xl font-fun font-bold text-green-600">{stats.activeUsers}</div>
-            <div className="text-sm text-gray-600 font-fun">Active Users (7d)</div>
+            <div className="text-sm text-egg-pixel-black font-fun">Active Users (7d)</div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-purple-500">
             <div className="text-2xl font-fun font-bold text-purple-600">{stats.totalListings}</div>
-            <div className="text-sm text-gray-600 font-fun">Total Listings</div>
+            <div className="text-sm text-egg-pixel-black font-fun">Total Listings</div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-yellow-500">
             <div className="text-2xl font-fun font-bold text-yellow-600">{stats.newUsersToday}</div>
-            <div className="text-sm text-gray-600 font-fun">New Users Today</div>
+            <div className="text-sm text-egg-pixel-black font-fun">New Users Today</div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md border-l-4 border-red-500">
             <div className="text-2xl font-fun font-bold text-red-600">{stats.loginsToday}</div>
-            <div className="text-sm text-gray-600 font-fun">Logins Today</div>
+            <div className="text-sm text-egg-pixel-black font-fun">Logins Today</div>
           </div>
         </div>
 
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div>
-                <label className="block text-sm font-fun font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-fun font-semibold text-egg-pixel-black mb-2">
                   Search Users:
                 </label>
                 <input
@@ -239,17 +239,17 @@ export default function AdminDashboard() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by name..."
-                  className="px-4 py-2 border-2 border-gray-300 rounded-full font-fun focus:outline-none focus:border-yolk"
+                  className="px-4 py-2 border-2 border-gray-300 rounded-full font-fun focus:outline-none focus:border-yolk text-egg-pixel-black"
                 />
               </div>
               <div>
-                <label className="block text-sm font-fun font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-fun font-semibold text-egg-pixel-black mb-2">
                   Sort By:
                 </label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'name' | 'createdAt' | 'lastLogin' | 'listingsCount')}
-                  className="px-4 py-2 border-2 border-gray-300 rounded-full font-fun focus:outline-none focus:border-yolk"
+                  className="px-4 py-2 border-2 border-gray-300 rounded-full font-fun focus:outline-none focus:border-yolk text-egg-pixel-black"
                 >
                   <option value="createdAt">Date Created</option>
                   <option value="lastLogin">Last Login</option>
@@ -270,7 +270,7 @@ export default function AdminDashboard() {
         {/* Users Table */}
         <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-md overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-fun font-semibold text-gray-800">
+            <h2 className="text-xl font-fun font-semibold text-egg-pixel-black">
               User Accounts ({filteredAccounts.length})
             </h2>
           </div>
@@ -278,22 +278,22 @@ export default function AdminDashboard() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-egg-pixel-black uppercase tracking-wider">
                     User Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-egg-pixel-black uppercase tracking-wider">
                     Created
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-egg-pixel-black uppercase tracking-wider">
                     Last Login
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-egg-pixel-black uppercase tracking-wider">
                     Listings
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-egg-pixel-black uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-fun font-semibold text-egg-pixel-black uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -308,26 +308,26 @@ export default function AdminDashboard() {
                   return (
                     <tr key={account.name} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="font-fun font-semibold text-gray-900">{account.name}</div>
+                        <div className="font-fun font-semibold text-egg-pixel-black">{account.name}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 font-fun">
+                        <div className="text-sm text-egg-pixel-black font-fun">
                           {new Date(account.createdAt).toLocaleDateString()}
                         </div>
-                        <div className="text-xs text-gray-500 font-fun">
+                        <div className="text-xs text-egg-pixel-black font-fun">
                           {new Date(account.createdAt).toLocaleTimeString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 font-fun">
+                        <div className="text-sm text-egg-pixel-black font-fun">
                           {lastLogin.toLocaleDateString()}
                         </div>
-                        <div className="text-xs text-gray-500 font-fun">
+                        <div className="text-xs text-egg-pixel-black font-fun">
                           {lastLogin.toLocaleTimeString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex px-2 py-1 text-xs font-fun font-semibold rounded-full bg-yolk text-gray-800">
+                        <span className="inline-flex px-2 py-1 text-xs font-fun font-semibold rounded-full bg-yolk text-egg-pixel-black">
                           {account.listingsCount}
                         </span>
                       </td>
@@ -335,7 +335,7 @@ export default function AdminDashboard() {
                         <span className={`inline-flex px-2 py-1 text-xs font-fun font-semibold rounded-full ${
                           isActive 
                             ? 'bg-green-100 text-green-800' 
-                            : 'bg-gray-100 text-gray-800'
+                            : 'bg-gray-100 text-egg-pixel-black'
                         }`}>
                           {isActive ? 'Active' : 'Inactive'}
                         </span>
@@ -365,7 +365,7 @@ export default function AdminDashboard() {
                   className="w-16 h-16 object-contain"
                 />
               </div>
-              <p className="text-gray-500 font-fun">No users found</p>
+              <p className="text-egg-pixel-black font-fun">No users found</p>
             </div>
           )}
         </div>

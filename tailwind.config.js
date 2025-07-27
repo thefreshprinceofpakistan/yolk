@@ -4,6 +4,7 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./public/index.html",
   ],
+  darkMode: 'class', // This prevents automatic dark mode switching
   theme: {
     extend: {
       colors: {
