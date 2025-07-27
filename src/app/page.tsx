@@ -77,6 +77,7 @@ export default function Home() {
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
   const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Array of just two pixel art frame images to alternate between
   const pixelFrames = [
@@ -117,6 +118,30 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [pixelFrames.length]);
+
+  // Close mobile menu when clicking outside or resizing to desktop
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isMobileMenuOpen && !target.closest('header')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth >= 768) { // md breakpoint
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMobileMenuOpen]);
 
   // Get unique locations for filter dropdown
   const uniqueLocations = Array.from(new Set(allListings.map(listing => listing.location))).sort();
@@ -309,6 +334,7 @@ export default function Home() {
       <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
+            {/* Logo and Title */}
             <div className="flex items-center space-x-3">
               <div className="animate-bounce w-25 h-25 flex items-center justify-center">
                 <Image
@@ -323,12 +349,14 @@ export default function Home() {
                 <h1 className="text-2xl font-pixel font-bold text-egg-pixel-black">
                   EGGCONOMY
                 </h1>
-                <p className="text-sm font-fun text-egg-yolkDark">
+                <p className="text-sm font-fun text-egg-yolkDark hidden sm:block">
                   Cheaper, Better, More Together
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-3">
               {userSession?.isLoggedIn ? (
                 <>
                   <span className="text-sm font-fun text-egg-pixel-black">
@@ -364,6 +392,92 @@ export default function Home() {
                 </>
               )}
             </div>
+
+            {/* Mobile Hamburger Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden bg-egg-white border-2 border-egg-pixel-black shadow-pixel p-2 rounded-none"
+              aria-label="Toggle mobile menu"
+            >
+              <div className="w-6 h-6 flex flex-col justify-center items-center space-y-1">
+                <div className={`w-5 h-0.5 bg-egg-pixel-black transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
+                <div className={`w-5 h-0.5 bg-egg-pixel-black transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`}></div>
+                <div className={`w-5 h-0.5 bg-egg-pixel-black transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
+              </div>
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          <div className={`md:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+            <div className="pt-4 pb-2 space-y-3 border-t-2 border-egg-yolk mt-4">
+              {userSession?.isLoggedIn ? (
+                <>
+                  <div className="text-center mb-4">
+                    <span className="text-sm font-fun text-egg-pixel-black bg-egg-yolkLight px-3 py-1 rounded-none border border-egg-pixel-black">
+                      Welcome, {userSession.name}!
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3">
+                    <Link 
+                      href="/add" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg text-center"
+                    >
+                      ADD EGGS
+                    </Link>
+                    <Link 
+                      href="/messages" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 text-center"
+                    >
+                      MESSAGES
+                    </Link>
+                    <Link 
+                      href="/mission" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 text-center"
+                    >
+                      MISSION
+                    </Link>
+                    <button 
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 w-full"
+                    >
+                      LOGOUT
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 gap-3">
+                    <Link 
+                      href="/add" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg text-center"
+                    >
+                      ADD EGGS
+                    </Link>
+                    <Link 
+                      href="/mission" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 text-center"
+                    >
+                      MISSION
+                    </Link>
+                    <Link 
+                      href="/login" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 text-center"
+                    >
+                      SIGN IN
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -383,7 +497,7 @@ export default function Home() {
                   height={20}
                   className="w-5 h-5 object-contain"
                 />
-                <span>SEARCH FOR EGGS, GOODS, OR LOCATIONS:</span>
+                <span className="text-xs sm:text-sm">SEARCH FOR EGGS, GOODS, OR LOCATIONS:</span>
               </div>
             </label>
             <div className="relative">
@@ -393,7 +507,7 @@ export default function Home() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="e.g., vegetables, bread, Berea, fresh eggs..."
-                className="w-full px-4 py-3 pl-12 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
+                className="w-full px-4 py-3 pl-12 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk text-sm"
               />
               <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
                 <Image
@@ -418,14 +532,14 @@ export default function Home() {
                   height={20}
                   className="w-5 h-5 object-contain"
                 />
-                <span>FILTER BY LOCATION:</span>
+                <span className="text-xs sm:text-sm">FILTER BY LOCATION:</span>
               </div>
             </label>
             <select
               id="location"
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
+              className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk text-sm"
             >
               <option value="">All locations</option>
               {uniqueLocations.map(location => (
@@ -441,19 +555,20 @@ export default function Home() {
             <h2 className="text-lg font-pixel font-semibold text-egg-pixel-black mb-4">
               BROWSE BY EXCHANGE TYPE:
             </h2>
-            <div className="flex flex-wrap gap-3">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
               {(['all', 'gift', 'barter', 'cash'] as ExchangeType[]).map((type) => (
                 <button
                   key={type}
                   onClick={() => handleFilterClick(type)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-none border-2 border-egg-pixel-black font-pixel font-medium transition-all duration-200 shadow-pixel ${
+                  className={`flex items-center justify-center space-x-2 px-3 sm:px-4 py-3 rounded-none border-2 border-egg-pixel-black font-pixel font-medium transition-all duration-200 shadow-pixel text-sm sm:text-base ${
                     filter === type
                       ? 'bg-egg-yolk text-egg-pixel-black shadow-pixel-lg scale-105'
                       : 'bg-egg-white text-egg-pixel-black hover:bg-egg-yolkLight hover:shadow-pixel-lg'
                   }`}
                 >
-                  {renderExchangeIcon(type, 'text-lg')}
-                  <span>{getExchangeLabel(type).toUpperCase()}</span>
+                  {renderExchangeIcon(type, 'text-base sm:text-lg')}
+                  <span className="hidden sm:inline">{getExchangeLabel(type).toUpperCase()}</span>
+                  <span className="sm:hidden">{getExchangeLabel(type).toUpperCase().slice(0, 4)}</span>
                 </button>
               ))}
             </div>
@@ -464,7 +579,7 @@ export default function Home() {
             <div className="flex justify-center">
               <button
                 onClick={clearFilters}
-                className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-6 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200"
+                className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-medium px-4 sm:px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 text-sm sm:text-base"
               >
                 🗑️ CLEAR ALL FILTERS
               </button>
@@ -473,7 +588,7 @@ export default function Home() {
 
           {/* Results Count */}
           <div className="text-center">
-            <p className="font-pixel text-egg-pixel-black">
+            <p className="font-pixel text-egg-pixel-black text-sm sm:text-base">
               FOUND {filteredListings.length} EGG LISTING{filteredListings.length !== 1 ? 'S' : ''}
               {(searchQuery || locationFilter || filter !== 'all') && (
                 <span className="text-egg-yolkDark">
@@ -505,21 +620,21 @@ export default function Home() {
             {filteredListings.map((listing) => (
               <div
                 key={listing.id}
-                className="bg-egg-white/90 backdrop-blur-sm rounded-none p-6 shadow-pixel hover:shadow-pixel-lg transition-all duration-200 border-3 border-egg-yolk"
+                className="bg-egg-white/90 backdrop-blur-sm rounded-none p-4 sm:p-6 shadow-pixel hover:shadow-pixel-lg transition-all duration-200 border-3 border-egg-yolk"
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 space-y-3 sm:space-y-0">
                   <div className="flex items-center space-x-3">
                     <div>
-                      {renderExchangeIcon(listing.exchangeType, 'text-2xl')}
+                      {renderExchangeIcon(listing.exchangeType, 'text-xl sm:text-2xl')}
                     </div>
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <h3 className="font-pixel font-semibold text-lg text-egg-pixel-black">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2 flex-wrap">
+                        <h3 className="font-pixel font-semibold text-base sm:text-lg text-egg-pixel-black break-words">
                           {listing.name.toUpperCase()}
                         </h3>
                         {/* Show "New" badge for listings added in the last 24 hours */}
                         {new Date(listing.datePosted) > new Date(Date.now() - 24 * 60 * 60 * 1000) && (
-                          <span className="bg-blush text-egg-white text-xs font-pixel font-bold px-2 py-1 rounded-none border border-egg-pixel-black">
+                          <span className="bg-blush text-egg-white text-xs font-pixel font-bold px-2 py-1 rounded-none border border-egg-pixel-black flex-shrink-0">
                             NEW
                           </span>
                         )}
@@ -527,8 +642,8 @@ export default function Home() {
                       <p className="text-sm font-fun text-egg-pixel-black">{listing.location}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-pixel font-bold text-xl text-egg-yolkDark">
+                  <div className="text-left sm:text-right">
+                    <div className="font-pixel font-bold text-lg sm:text-xl text-egg-yolkDark">
                       {listing.quantity} EGGS
                     </div>
                     <div className="text-xs font-fun text-egg-pixel-black">
@@ -538,29 +653,29 @@ export default function Home() {
                 </div>
 
                 <div className="mb-3">
-                  <p className="text-egg-pixel-black font-fun">{listing.notes}</p>
+                  <p className="text-egg-pixel-black font-fun text-sm sm:text-base">{listing.notes}</p>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {listing.exchangeType === 'barter' && listing.barterFor && (
-                    <span className="bg-grass/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                    <span className="bg-grass/30 text-egg-pixel-black px-2 sm:px-3 py-1 rounded-none border border-egg-pixel-black text-xs sm:text-sm font-pixel">
                       WANTS: {listing.barterFor.toUpperCase()}
                     </span>
                   )}
                   {listing.exchangeType === 'cash' && listing.suggestedCash && (
-                    <span className="bg-sky/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                    <span className="bg-sky/30 text-egg-pixel-black px-2 sm:px-3 py-1 rounded-none border border-egg-pixel-black text-xs sm:text-sm font-pixel">
                       {listing.suggestedCash.toUpperCase()}
                     </span>
                   )}
                   {listing.exchangeType === 'hybrid' && (
                     <>
                       {listing.barterFor && (
-                        <span className="bg-grass/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                        <span className="bg-grass/30 text-egg-pixel-black px-2 sm:px-3 py-1 rounded-none border border-egg-pixel-black text-xs sm:text-sm font-pixel">
                           TRADE: {listing.barterFor.toUpperCase()}
                         </span>
                       )}
                       {listing.suggestedCash && (
-                        <span className="bg-sky/30 text-egg-pixel-black px-3 py-1 rounded-none border border-egg-pixel-black text-sm font-pixel">
+                        <span className="bg-sky/30 text-egg-pixel-black px-2 sm:px-3 py-1 rounded-none border border-egg-pixel-black text-xs sm:text-sm font-pixel">
                           OR: {listing.suggestedCash.toUpperCase()}
                         </span>
                       )}
@@ -568,12 +683,12 @@ export default function Home() {
                   )}
                 </div>
 
-                <div className="mt-4 pt-3 border-t-2 border-egg-pixel-gray flex justify-between items-center">
+                <div className="pt-3 border-t-2 border-egg-pixel-gray flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
                   <button 
                     onClick={() => handleCrackDeal(listing)}
-                    className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                    className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg text-sm sm:text-base"
                   >
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-center space-x-2">
                       <span>START CHAT</span>
                       <Image
                         src="/pixil-frame-0 (9).png"
@@ -605,20 +720,20 @@ export default function Home() {
 
         {/* Empty State */}
         {!isLoading && filteredListings.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-8 sm:py-12 px-4">
             <div className="mb-4 animate-bounce">
               <Image
                 src="/pixil-frame-0 (9).png"
                 alt="No eggs found"
                 width={96}
                 height={96}
-                className="w-24 h-24 object-contain"
+                className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
               />
             </div>
-            <h3 className="text-xl font-pixel font-semibold text-egg-pixel-black mb-2">
+            <h3 className="text-lg sm:text-xl font-pixel font-semibold text-egg-pixel-black mb-2">
               NO EGGS FOUND
             </h3>
-            <p className="text-egg-pixel-black font-fun mb-4">
+            <p className="text-egg-pixel-black font-fun mb-4 text-sm sm:text-base">
               {searchQuery || locationFilter || filter !== 'all' 
                 ? 'Try adjusting your search or filters!'
                 : 'Be the first to post some eggs!'
@@ -626,9 +741,9 @@ export default function Home() {
             </p>
             <Link 
               href="/add"
-              className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block"
+              className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 sm:px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block text-sm sm:text-base"
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-center space-x-2">
                 <span>ADD YOUR EGGS!</span>
                 <Image
                   src="/pixil-frame-0 (9).png"
@@ -646,7 +761,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-egg-white/90 backdrop-blur-sm border-t-3 border-egg-yolk mt-12 shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center">
-          <p className="font-pixel text-egg-pixel-black flex items-center justify-center space-x-2">
+          <p className="font-pixel text-egg-pixel-black flex items-center justify-center space-x-2 text-sm sm:text-base flex-wrap">
             <Image
               src="/pixil-frame-0 (9).png"
               alt="Egg"
@@ -654,7 +769,7 @@ export default function Home() {
               height={20}
               className="w-5 h-5 object-contain"
             />
-            <span>BUILDING COMMUNITY, ONE EGG AT A TIME</span>
+            <span className="text-center">BUILDING COMMUNITY, ONE EGG AT A TIME</span>
             <Image
               src="/pixil-frame-0 (9).png"
               alt="Egg"
