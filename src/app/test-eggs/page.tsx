@@ -2,7 +2,7 @@
 
 export default function TestEggs() {
   return (
-    <div className="min-h-screen bg-[#FFCF08] p-8">
+    <div className="min-h-screen bg-[#ff9e03] p-8">
       <h1 className="text-3xl font-bold mb-8">Egg Image Test</h1>
       
       <div className="space-y-8">

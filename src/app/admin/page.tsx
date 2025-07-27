@@ -132,22 +132,38 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FFCF08] flex items-center justify-center">
-        <div className="animate-bounce">
-          <Image
-            src="/pixil-frame-0 (9).png"
-            alt="Loading"
-            width={96}
-            height={96}
-            className="w-24 h-24 object-contain"
-          />
+      <div className="min-h-screen bg-[#ff9e03] flex items-center justify-center">
+        <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk max-w-md w-full mx-4">
+          <div className="text-center mb-8">
+            <div className="animate-bounce mb-4">
+              <Image
+                src="/pixil-frame-0 (9).png"
+                alt="Admin access required"
+                width={80}
+                height={80}
+                className="w-20 h-20 object-contain mx-auto"
+              />
+            </div>
+            <h2 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
+              ADMIN ACCESS REQUIRED
+            </h2>
+            <p className="text-egg-pixel-black font-fun mb-6">
+              This page is only accessible to administrators.
+            </p>
+            <Link 
+              href="/"
+              className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg inline-block"
+            >
+              BACK TO HOME
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FFCF08]">
+    <div className="min-h-screen bg-[#ff9e03]">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b-2 border-yolk shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">

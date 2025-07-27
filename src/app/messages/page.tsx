@@ -143,7 +143,7 @@ export default function Messages() {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#FFCF08] flex items-center justify-center">
+      <div className="min-h-screen bg-[#ff9e03] flex items-center justify-center">
         <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk text-center">
           <div className="flex justify-center mb-6">
             <Image
@@ -172,7 +172,7 @@ export default function Messages() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFCF08]">
+    <div className="min-h-screen bg-[#ff9e03]">
       {/* Header */}
       <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-6xl mx-auto px-4 py-4">

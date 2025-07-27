@@ -66,7 +66,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFCF08] flex items-center justify-center">
+    <div className="min-h-screen bg-[#ff9e03] flex items-center justify-center">
       <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk max-w-md w-full mx-4">
         <div className="text-center mb-8">
           <div className="flex justify-center items-center" style={{ animation: 'wobble 2s ease-in-out infinite' }}>

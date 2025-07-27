@@ -9,16 +9,16 @@ module.exports = {
       colors: {
         // Cute pixelated egg theme
         egg: {
-          yolk: '#FFD93D', // Bright pixel yellow
-          yolkLight: '#FFE566', // Lighter yellow
-          yolkDark: '#FFB800', // Darker yellow
+          yolk: '#ff9e03', // New orange-yellow color
+          yolkLight: '#ffb333', // Lighter variant
+          yolkDark: '#e68a00', // Darker variant
           white: '#FFFFFF', // Pure white
           shell: '#F8F8F8', // Off-white shell
           shellDark: '#E8E8E8', // Slightly darker shell
           pixel: {
-            yellow: '#FFD93D',
-            yellowLight: '#FFE566',
-            yellowDark: '#FFB800',
+            yellow: '#ff9e03', // Updated to match
+            yellowLight: '#ffb333', // Lighter variant
+            yellowDark: '#e68a00', // Darker variant
             white: '#FFFFFF',
             gray: '#E0E0E0',
             grayDark: '#C0C0C0',
