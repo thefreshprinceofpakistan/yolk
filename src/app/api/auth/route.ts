@@ -96,10 +96,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
           success: true,
           user: {
+            id: user.id,
             name: user.name,
             isLoggedIn: true,
-            loginTime: new Date().toISOString(),
-          }
+            loginTime: user.last_login || new Date().toISOString(),
+          },
         });
       } else {
         console.log('Supabase not configured, using fallback');

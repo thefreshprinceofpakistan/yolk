@@ -62,7 +62,7 @@ export default function Home() {
   const [filter, setFilter] = useState<ExchangeType>('all');
   const [isLoading, setIsLoading] = useState(false);
   const [allListings, setAllListings] = useState<Listing[]>(mockListings);
-  const [userSession, setUserSession] = useState<{ name: string; isLoggedIn: boolean } | null>(null);
+  const [userSession, setUserSession] = useState<{ id: string; name: string; isLoggedIn: boolean } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [selectedDeal, setSelectedDeal] = useState<Listing | null>(null);
@@ -240,8 +240,15 @@ export default function Home() {
   };
 
   const handleCrackDeal = (listing: Listing) => {
+    if (!userSession?.isLoggedIn) {
+      alert('Please sign in to start a conversation!');
+      return;
+    }
+    
     setSelectedDeal(listing);
     setShowDealModal(true);
+    setShowMessageForm(false);
+    setMessageSent(false);
   };
 
   const closeDealModal = () => {
@@ -329,6 +336,9 @@ export default function Home() {
                   </span>
                   <Link href="/add" className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
                     ADD EGGS
+                  </Link>
+                  <Link href="/messages" className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200">
+                    MESSAGES
                   </Link>
                   <Link href="/mission" className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-medium px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200">
                     MISSION
@@ -564,7 +574,7 @@ export default function Home() {
                     className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
                   >
                     <div className="flex items-center space-x-2">
-                      <span>CRACK A DEAL!</span>
+                      <span>START CHAT</span>
                       <Image
                         src="/pixil-frame-0 (9).png"
                         alt="Deal"
@@ -756,10 +766,45 @@ export default function Home() {
                     CLOSE
                   </button>
                   <button
-                    onClick={() => setShowMessageForm(true)}
+                    onClick={() => {
+                      // Start a conversation
+                      if (selectedDeal && userSession) {
+                        // For now, we'll use a simple approach - create conversation with the listing owner
+                        // In a real app, we'd get the seller ID from the listing
+                        const sellerId = selectedDeal.name === 'TestUser1' ? 'f80b7d6f-2cb2-4d60-a2bf-11954ce6addb' : 
+                                       selectedDeal.name === 'TestUser2' ? '2dccc0c0-df41-450f-8709-0fa617804f68' : 
+                                       userSession.id; // fallback
+                        
+                        // Create conversation via API
+                        fetch('/api/conversations', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            listingId: selectedDeal.id,
+                            buyerId: userSession.id,
+                            sellerId: sellerId,
+                          }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                          if (data.conversation) {
+                            // Redirect to messages page
+                            window.location.href = '/messages';
+                          } else {
+                            alert('Failed to start conversation. Please try again.');
+                          }
+                        })
+                        .catch(error => {
+                          console.error('Error starting conversation:', error);
+                          alert('Failed to start conversation. Please try again.');
+                        });
+                      }
+                    }}
                     className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-pixel font-semibold py-3 rounded-none border-2 border-blue-700 shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
                   >
-                    SEND MESSAGE 💬
+                    START CHAT 💬
                   </button>
                   <button
                     onClick={() => {

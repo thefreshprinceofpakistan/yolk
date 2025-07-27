@@ -80,7 +80,22 @@ export async function GET() {
       }
 
       console.log('Successfully fetched from Supabase:', listings?.length || 0, 'listings');
-      return NextResponse.json({ listings: listings || [] });
+      
+      // Convert snake_case back to camelCase for frontend
+      const frontendListings = (listings || []).map(listing => ({
+        id: listing.id,
+        name: listing.name,
+        quantity: listing.quantity,
+        exchangeType: listing.exchange_type,
+        location: listing.location,
+        notes: listing.notes,
+        datePosted: listing.date_posted,
+        barterFor: listing.barter_for,
+        suggestedCash: listing.suggested_cash,
+        paymentHandles: listing.payment_handles,
+      }));
+      
+      return NextResponse.json({ listings: frontendListings });
     } else {
       console.log('Supabase not configured, using fallback data');
       // Fallback to in-memory storage
@@ -99,9 +114,17 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
+    // Convert camelCase to snake_case for database
     const newListing = {
-      ...body,
+      name: body.name,
+      quantity: body.quantity,
+      exchange_type: body.exchangeType, // Convert camelCase to snake_case
+      location: body.location,
+      notes: body.notes,
       date_posted: new Date().toISOString().split('T')[0],
+      barter_for: body.barterFor, // Convert camelCase to snake_case
+      suggested_cash: body.suggestedCash, // Convert camelCase to snake_case
+      payment_handles: body.paymentHandles, // Convert camelCase to snake_case
     };
     
     if (supabase) {
@@ -121,8 +144,9 @@ export async function POST(request: NextRequest) {
         if (error.code === '42P01') {
           console.log('Table not found, saving to fallback');
           const fallbackListing = {
-            ...newListing,
+            ...body,
             id: Date.now().toString(),
+            datePosted: new Date().toISOString().split('T')[0],
           };
           fallbackListings.unshift(fallbackListing);
           
@@ -139,16 +163,32 @@ export async function POST(request: NextRequest) {
       }
       
       console.log('Successfully saved to Supabase');
+      
+      // Convert snake_case back to camelCase for frontend
+      const frontendListing = {
+        id: data.id,
+        name: data.name,
+        quantity: data.quantity,
+        exchangeType: data.exchange_type,
+        location: data.location,
+        notes: data.notes,
+        datePosted: data.date_posted,
+        barterFor: data.barter_for,
+        suggestedCash: data.suggested_cash,
+        paymentHandles: data.payment_handles,
+      };
+      
       return NextResponse.json({ 
         success: true, 
-        listing: data 
+        listing: frontendListing 
       }, { status: 201 });
     } else {
       console.log('Supabase not configured, saving to fallback');
       // Fallback to in-memory storage
       const fallbackListing = {
-        ...newListing,
+        ...body,
         id: Date.now().toString(),
+        datePosted: new Date().toISOString().split('T')[0],
       };
       fallbackListings.unshift(fallbackListing);
       
