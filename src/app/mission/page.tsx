@@ -165,19 +165,19 @@ export default function Mission() {
             </h3>
             <div className="space-y-4 font-fun text-egg-pixel-black">
               <p>
-                Eggs became our symbol because they represent something universal - 
+                Eggs became our symbol because they represent something universal, 
                 everyone needs food, and eggs are accessible to everyone. 
                 They&apos;re simple, they&apos;re essential, and they bring people together.
               </p>
               <p>
-                But we noticed something troubling - people were struggling to afford 
+                But we noticed something troubling, people were struggling to afford 
                 basic foods like eggs from the store. Prices kept rising, but wages 
                 weren&apos;t keeping up. Something as simple as a dozen eggs was becoming 
                 a luxury for many families.
               </p>
               <p>
                 We wanted to start something that honors that simplicity. 
-                Something that connects neighbors through the most basic human need - 
+                Something that connects neighbors through the most basic human need, 
                 sharing food. No corporate middlemen, no complicated systems, 
                 just people helping people with what they have.
               </p>

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eggconomy - Local Egg Trading",
+  title: "Eggconomy • Local Egg Trading",
   description: "Trade eggs with your community! Find fresh eggs, barter for goods, or gift to neighbors.",
 };
 

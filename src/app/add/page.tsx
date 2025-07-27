@@ -201,7 +201,7 @@ export default function AddEggs() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name - pre-filled and read-only for logged-in users */}
+            {/* Name • pre-filled and read-only for logged-in users */}
             <div>
               <label htmlFor="name" className="block text-sm font-pixel font-semibold text-egg-pixel-black mb-2">
                 YOUR NAME *

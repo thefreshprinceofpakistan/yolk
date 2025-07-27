@@ -271,7 +271,7 @@ export default function Messages() {
                         </span>
                       </div>
                       <p className="font-fun text-sm text-egg-pixel-black mb-1">
-                        {conversation.listing.name} - {conversation.listing.quantity} eggs
+                        {conversation.listing.name} • {conversation.listing.quantity} eggs
                       </p>
                       <div className="flex items-center space-x-2">
                         <span className={`px-2 py-1 text-xs font-pixel rounded-none border ${
@@ -300,7 +300,7 @@ export default function Messages() {
                       {getOtherUserName(selectedConversation)}
                     </h3>
                     <p className="font-fun text-sm text-egg-pixel-black">
-                      {selectedConversation.listing.name} - {selectedConversation.listing.quantity} eggs
+                      {selectedConversation.listing.name} • {selectedConversation.listing.quantity} eggs
                     </p>
                   </div>
 

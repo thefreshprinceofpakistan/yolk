@@ -700,7 +700,7 @@ export default function Home() {
                     </div>
                   </button>
                   
-                  {/* Delete button - only show for logged-in user's own listings */}
+                  {/* Delete button • only show for logged-in user's own listings */}
                   {userSession?.isLoggedIn && 
                    !mockListings.find(mock => mock.id === listing.id) && 
                    listing.name === userSession.name && (
@@ -884,7 +884,7 @@ export default function Home() {
                     onClick={() => {
                       // Start a conversation
                       if (selectedDeal && userSession) {
-                        // For now, we'll use a simple approach - create conversation with the listing owner
+                        // For now, we'll use a simple approach • create conversation with the listing owner
                         // In a real app, we'd get the seller ID from the listing
                         const sellerId = selectedDeal.name === 'TestUser1' ? 'f80b7d6f-2cb2-4d60-a2bf-11954ce6addb' : 
                                        selectedDeal.name === 'TestUser2' ? '2dccc0c0-df41-450f-8709-0fa617804f68' : 
