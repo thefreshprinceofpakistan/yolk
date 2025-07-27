@@ -9,18 +9,21 @@ type ExchangeType = 'gift' | 'barter' | 'cash' | 'hybrid';
 export default function AddEggs() {
   const [formData, setFormData] = useState({
     name: '',
-    quantity: '',
+    quantity: 12,
     exchangeType: 'gift' as ExchangeType,
     barterFor: '',
     suggestedCash: '',
-    venmo: '',
-    paypal: '',
+    paymentHandles: {
+      venmo: '',
+      paypal: '',
+    },
     location: '',
     notes: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [userSession, setUserSession] = useState<{ name: string; isLoggedIn: boolean } | null>(null);
 
   // Load user session on component mount
@@ -43,53 +46,126 @@ export default function AddEggs() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    if (name === 'venmo' || name === 'paypal') {
+      setFormData(prev => ({
+        ...prev,
+        paymentHandles: {
+          ...prev.paymentHandles,
+          [name]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: name === 'quantity' ? parseInt(value) || 0 : value
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Create new listing object
-    const newListing = {
-      id: Date.now().toString(), // Simple ID generation
-      name: formData.name,
-      quantity: parseInt(formData.quantity),
-      exchangeType: formData.exchangeType,
-      barterFor: formData.barterFor || undefined,
-      suggestedCash: formData.suggestedCash || undefined,
-      paymentHandles: {
-        venmo: formData.venmo || undefined,
-        paypal: formData.paypal || undefined,
-      },
-      location: formData.location,
-      notes: formData.notes || undefined,
-      datePosted: new Date().toISOString().split('T')[0], // Today's date
-    };
+    setError('');
 
-    // Save to localStorage
-    try {
-      const existingListings = localStorage.getItem('eggListings');
-      const savedListings = existingListings ? JSON.parse(existingListings) : [];
-      savedListings.push(newListing);
-      localStorage.setItem('eggListings', JSON.stringify(savedListings));
-    } catch (error) {
-      console.error('Error saving listing:', error);
+    // Input validation
+    if (!formData.name.trim() || formData.name.length < 2 || formData.name.length > 50) {
+      setError('Name must be between 2 and 50 characters');
+      setIsSubmitting(false);
+      return;
     }
-    
-    // Simulate form submission delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setShowSuccess(true);
-    
-    // Redirect to homepage after 3 seconds
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 3000);
+
+    if (!formData.quantity || formData.quantity < 1 || formData.quantity > 1000) {
+      setError('Quantity must be between 1 and 1000');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.location.trim() || formData.location.length < 2 || formData.location.length > 100) {
+      setError('Location must be between 2 and 100 characters');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.notes && formData.notes.length > 500) {
+      setError('Notes must be less than 500 characters');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.barterFor && formData.barterFor.length > 200) {
+      setError('Barter request must be less than 200 characters');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.suggestedCash && formData.suggestedCash.length > 50) {
+      setError('Suggested cash amount must be less than 50 characters');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate payment handles
+    if (formData.paymentHandles.venmo && !formData.paymentHandles.venmo.startsWith('@')) {
+      setError('Venmo handle must start with @');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.paymentHandles.paypal && !formData.paymentHandles.paypal.includes('@')) {
+      setError('PayPal must be a valid email address');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/listings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save to localStorage as fallback
+        const newListing = {
+          ...formData,
+          id: data.listing?.id || Date.now().toString(),
+          datePosted: new Date().toISOString().split('T')[0],
+        };
+
+        const existingListings = JSON.parse(localStorage.getItem('eggListings') || '[]');
+        const updatedListings = [newListing, ...existingListings];
+        localStorage.setItem('eggListings', JSON.stringify(updatedListings));
+
+        // Reset form
+        setFormData({
+          name: '',
+          quantity: 12,
+          exchangeType: 'gift',
+          location: '',
+          notes: '',
+          barterFor: '',
+          suggestedCash: '',
+          paymentHandles: {
+            venmo: '',
+            paypal: '',
+          },
+        });
+
+        setSuccessMessage('Egg listing added successfully! 🥚');
+        setTimeout(() => setSuccessMessage(''), 5000);
+      } else {
+        setError(data.error || 'Failed to add listing');
+      }
+    } catch (error) {
+      setError('Network error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // If not logged in, show login prompt
@@ -123,7 +199,7 @@ export default function AddEggs() {
     );
   }
 
-  if (showSuccess) {
+  if (successMessage) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-egg-yolkLight to-egg-white flex items-center justify-center">
         <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel text-center max-w-md mx-4 border-3 border-egg-yolk">
@@ -307,7 +383,7 @@ export default function AddEggs() {
                     type="text"
                     id="venmo"
                     name="venmo"
-                    value={formData.venmo}
+                    value={formData.paymentHandles.venmo}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                     placeholder="e.g., @yourname"
@@ -321,7 +397,7 @@ export default function AddEggs() {
                     type="email"
                     id="paypal"
                     name="paypal"
-                    value={formData.paypal}
+                    value={formData.paymentHandles.paypal}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border-3 border-egg-pixel-black rounded-none bg-egg-white font-fun shadow-pixel focus:outline-none focus:ring-2 focus:ring-egg-yolk"
                     placeholder="e.g., yourname@email.com"
@@ -362,6 +438,32 @@ export default function AddEggs() {
                 placeholder="e.g., Fresh from our backyard hens! Laid this morning. Perfect for baking."
               />
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-none relative" role="alert">
+                <strong className="font-bold">Error!</strong>
+                <span className="block sm:inline"> {error}</span>
+                <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                  <button onClick={() => setError('')} className="text-red-700">
+                    <svg className="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.15 2.759 3.152z"/></svg>
+                  </button>
+                </span>
+              </div>
+            )}
+
+            {/* Success Message */}
+            {successMessage && (
+              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-none relative" role="alert">
+                <strong className="font-bold">Success!</strong>
+                <span className="block sm:inline"> {successMessage}</span>
+                <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                  <button onClick={() => setSuccessMessage('')} className="text-green-700">
+                    <svg className="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm3.707-9.293a1 1 0 0 0-1.414-1.414L9 10.586 7.707 9.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z"/></svg>
+                  </button>
+                </span>
+              </div>
+            )}
 
             {/* Submit Button */}
             <button

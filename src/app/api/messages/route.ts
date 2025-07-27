@@ -39,9 +39,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { conversationId, senderId, content } = body;
+    const { conversationId, senderId, content, photo_url } = body;
 
-    if (!conversationId || !senderId || !content) {
+    if (!conversationId || !senderId || (!content && !photo_url)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -55,7 +55,8 @@ export async function POST(request: NextRequest) {
       .insert({
         conversation_id: conversationId,
         sender_id: senderId,
-        content: content.trim()
+        content: content?.trim() || '',
+        photo_url: photo_url || null
       })
       .select(`
         *,

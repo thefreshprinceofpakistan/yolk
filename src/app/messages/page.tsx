@@ -12,6 +12,7 @@ interface Message {
     name: string;
   };
   sender_id: string;
+  photo_url?: string; // Add photo support
 }
 
 interface Conversation {
@@ -37,6 +38,11 @@ interface User {
   name: string;
   isLoggedIn: boolean;
   loginTime: string;
+  character?: {
+    animal: 'cow' | 'pig' | 'chick';
+    accessory: 'none' | 'bow' | 'moustache' | 'hat';
+    name: string;
+  };
 }
 
 export default function Messages() {
@@ -46,18 +52,32 @@ export default function Messages() {
   const [newMessage, setNewMessage] = useState('');
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
 
   useEffect(() => {
     // Get current user from localStorage
-    const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const user = JSON.parse(localStorage.getItem('userSession') || 'null');
     setCurrentUser(user);
 
-    if (user) {
-      fetchConversations(user.id);
+    if (user?.isLoggedIn) {
+      fetchConversations(user.id || user.name); // Use name as fallback if no id
     } else {
       setLoading(false);
     }
   }, []);
+
+  // Refresh conversations when page becomes visible (for new conversations)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && currentUser?.isLoggedIn) {
+        fetchConversations(currentUser.id || currentUser.name);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [currentUser]);
 
   const fetchConversations = async (userId: string) => {
     try {
@@ -66,9 +86,55 @@ export default function Messages() {
       
       if (data.conversations) {
         setConversations(data.conversations);
+      } else {
+        // Fallback to localStorage for testing
+        console.log('Using localStorage fallback for conversations');
+        const savedConversations = localStorage.getItem('testConversations');
+        if (savedConversations) {
+          const allConversations = JSON.parse(savedConversations);
+          // Filter to only show conversations where current user is involved
+          const userConversations = allConversations.filter((conv: Conversation) => 
+            conv.buyer.name === currentUser?.name || conv.seller.name === currentUser?.name
+          );
+          setConversations(userConversations);
+        } else {
+          // Create some test conversations for the current user
+          const testConversations = [
+            {
+              id: 'conv1',
+              listing: { name: 'Sarah from Berea', quantity: 12, exchange_type: 'gift' },
+              buyer: { name: currentUser?.name || 'User' },
+              seller: { name: 'Sarah from Berea' },
+              status: 'active',
+              updated_at: new Date().toISOString(),
+              messages: []
+            },
+            {
+              id: 'conv2', 
+              listing: { name: "Mike's Farm", quantity: 24, exchange_type: 'barter' },
+              buyer: { name: currentUser?.name || 'User' },
+              seller: { name: "Mike's Farm" },
+              status: 'active',
+              updated_at: new Date().toISOString(),
+              messages: []
+            }
+          ];
+          setConversations(testConversations);
+          localStorage.setItem('testConversations', JSON.stringify(testConversations));
+        }
       }
     } catch (error) {
       console.error('Error fetching conversations:', error);
+      // Fallback to localStorage
+      const savedConversations = localStorage.getItem('testConversations');
+      if (savedConversations) {
+        const allConversations = JSON.parse(savedConversations);
+        // Filter to only show conversations where current user is involved
+        const userConversations = allConversations.filter((conv: Conversation) => 
+          conv.buyer.name === currentUser?.name || conv.seller.name === currentUser?.name
+        );
+        setConversations(userConversations);
+      }
     } finally {
       setLoading(false);
     }
@@ -81,16 +147,78 @@ export default function Messages() {
       
       if (data.messages) {
         setMessages(data.messages);
+      } else {
+        // Fallback to localStorage for testing
+        const savedMessages = localStorage.getItem(`messages_${conversationId}`);
+        if (savedMessages) {
+          setMessages(JSON.parse(savedMessages));
+        } else {
+          setMessages([]);
+        }
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
+      // Fallback to localStorage
+      const savedMessages = localStorage.getItem(`messages_${conversationId}`);
+      if (savedMessages) {
+        setMessages(JSON.parse(savedMessages));
+      } else {
+        setMessages([]);
+      }
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${Math.floor(diffInHours)}h ago`;
+    return date.toLocaleDateString();
+  };
+
+  const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image must be smaller than 5MB');
+        return;
+      }
+      setSelectedPhoto(file);
+    }
+  };
+
+  const uploadPhoto = async (file: File): Promise<string> => {
+    // For now, we'll use a simple approach with localStorage
+    // In a real app, you'd upload to a cloud service like AWS S3 or Cloudinary
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        resolve(result);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedConversation || !currentUser) return;
+    if ((!newMessage.trim() && !selectedPhoto) || !selectedConversation || !currentUser) return;
+
+    setUploadingPhoto(true);
 
     try {
+      let photoUrl = '';
+      if (selectedPhoto) {
+        photoUrl = await uploadPhoto(selectedPhoto);
+      }
+
       const response = await fetch('/api/messages', {
         method: 'POST',
         headers: {
@@ -98,8 +226,9 @@ export default function Messages() {
         },
         body: JSON.stringify({
           conversationId: selectedConversation.id,
-          senderId: currentUser.id,
+          senderId: currentUser.id || currentUser.name,
           content: newMessage.trim(),
+          photo_url: photoUrl || undefined,
         }),
       });
 
@@ -108,14 +237,79 @@ export default function Messages() {
       if (data.message) {
         setMessages([...messages, data.message]);
         setNewMessage('');
+        setSelectedPhoto(null);
         
         // Refresh conversations to update timestamps
         if (currentUser) {
-          fetchConversations(currentUser.id);
+          fetchConversations(currentUser.id || currentUser.name);
         }
+      } else {
+        // Fallback to localStorage
+        const newMsg = {
+          id: Date.now().toString(),
+          content: newMessage.trim(),
+          created_at: new Date().toISOString(),
+          sender: { name: currentUser.name },
+          sender_id: currentUser.id || currentUser.name,
+          photo_url: photoUrl || undefined
+        };
+        
+        const updatedMessages = [...messages, newMsg];
+        setMessages(updatedMessages);
+        setNewMessage('');
+        setSelectedPhoto(null);
+        
+        // Save to localStorage
+        localStorage.setItem(`messages_${selectedConversation.id}`, JSON.stringify(updatedMessages));
+        
+        // Update conversation timestamp
+        const updatedConversation = { ...selectedConversation, updated_at: new Date().toISOString() };
+        setSelectedConversation(updatedConversation);
+        
+        // Update conversations list
+        const updatedConversations = conversations.map(conv => 
+          conv.id === selectedConversation.id ? updatedConversation : conv
+        );
+        setConversations(updatedConversations);
+        localStorage.setItem('testConversations', JSON.stringify(updatedConversations));
       }
     } catch (error) {
       console.error('Error sending message:', error);
+      // Fallback to localStorage
+      let photoUrl = '';
+      if (selectedPhoto) {
+        photoUrl = await uploadPhoto(selectedPhoto);
+      }
+
+      const newMsg = {
+        id: Date.now().toString(),
+        content: newMessage.trim(),
+        created_at: new Date().toISOString(),
+        sender: { name: currentUser.name },
+        sender_id: currentUser.id || currentUser.name,
+        photo_url: photoUrl || undefined
+      };
+      
+      const updatedMessages = [...messages, newMsg];
+      setMessages(updatedMessages);
+      setNewMessage('');
+      setSelectedPhoto(null);
+      
+      // Save to localStorage
+      localStorage.setItem(`messages_${selectedConversation.id}`, JSON.stringify(updatedMessages));
+      
+      // Update conversation timestamp
+      const updatedConversation = { ...selectedConversation, updated_at: new Date().toISOString() };
+      setSelectedConversation(updatedConversation);
+      
+      // Update conversations list
+      const updatedConversations = conversations.map(conv => 
+        conv.id === selectedConversation.id ? updatedConversation : conv
+      );
+      setConversations(updatedConversations);
+      localStorage.setItem('testConversations', JSON.stringify(updatedConversations));
+    } finally {
+      setUploadingPhoto(false);
     }
   };
 
@@ -129,16 +323,6 @@ export default function Messages() {
     return conversation.buyer.name === currentUser.name 
       ? conversation.seller.name 
       : conversation.buyer.name;
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-    
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${Math.floor(diffInHours)}h ago`;
-    return date.toLocaleDateString();
   };
 
   if (!currentUser) {
@@ -309,16 +493,28 @@ export default function Messages() {
                     {messages.map((message) => (
                       <div
                         key={message.id}
-                        className={`flex ${message.sender_id === currentUser?.id ? 'justify-end' : 'justify-start'}`}
+                        className={`flex ${message.sender_id === (currentUser?.id || currentUser?.name) ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
                           className={`max-w-xs px-4 py-2 rounded-none border-2 ${
-                            message.sender_id === currentUser?.id
+                            message.sender_id === (currentUser?.id || currentUser?.name)
                               ? 'bg-egg-yolk text-egg-pixel-black border-egg-pixel-black'
                               : 'bg-egg-white text-egg-pixel-black border-egg-pixel-black'
                           }`}
                         >
-                          <p className="font-fun text-sm">{message.content}</p>
+                          {message.photo_url && (
+                            <div className="mb-2">
+                              <img
+                                src={message.photo_url}
+                                alt="Message photo"
+                                className="max-w-full h-auto rounded-none border border-egg-pixel-black"
+                                style={{ maxHeight: '200px' }}
+                              />
+                            </div>
+                          )}
+                          {message.content && (
+                            <p className="font-fun text-sm">{message.content}</p>
+                          )}
                           <p className="text-xs opacity-70 mt-1">
                             {formatDate(message.created_at)}
                           </p>
@@ -329,7 +525,38 @@ export default function Messages() {
 
                   {/* Message Input */}
                   <div className="p-4 border-t-2 border-egg-yolk">
+                    {selectedPhoto && (
+                      <div className="mb-3 p-3 bg-egg-yolkLight/50 border-2 border-egg-yolk rounded-none">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <img
+                              src={URL.createObjectURL(selectedPhoto)}
+                              alt="Selected photo"
+                              className="w-12 h-12 object-cover rounded-none border border-egg-pixel-black"
+                            />
+                            <span className="font-fun text-sm text-egg-pixel-black">
+                              {selectedPhoto.name}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => setSelectedPhoto(null)}
+                            className="text-egg-pixel-black hover:text-red-600 font-pixel"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    )}
                     <div className="flex space-x-2">
+                      <label className="cursor-pointer bg-egg-white hover:bg-egg-yolkLight/30 text-egg-pixel-black font-pixel font-semibold px-3 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg flex items-center">
+                        📷
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handlePhotoSelect}
+                          className="hidden"
+                        />
+                      </label>
                       <input
                         type="text"
                         value={newMessage}
@@ -340,10 +567,10 @@ export default function Messages() {
                       />
                       <button
                         onClick={sendMessage}
-                        disabled={!newMessage.trim()}
+                        disabled={(!newMessage.trim() && !selectedPhoto) || uploadingPhoto}
                         className="bg-egg-yolk hover:bg-egg-yolkDark disabled:bg-egg-pixel-gray text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg disabled:cursor-not-allowed"
                       >
-                        SEND
+                        {uploadingPhoto ? 'SENDING...' : 'SEND'}
                       </button>
                     </div>
                   </div>

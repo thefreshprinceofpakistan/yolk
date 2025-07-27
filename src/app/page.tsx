@@ -951,37 +951,30 @@ export default function Home() {
                     onClick={() => {
                       // Start a conversation
                       if (selectedDeal && userSession) {
-                        // For now, we'll use a simple approach • create conversation with the listing owner
-                        // In a real app, we'd get the seller ID from the listing
-                        const sellerId = selectedDeal.name === 'TestUser1' ? 'f80b7d6f-2cb2-4d60-a2bf-11954ce6addb' : 
-                                       selectedDeal.name === 'TestUser2' ? '2dccc0c0-df41-450f-8709-0fa617804f68' : 
-                                       userSession.id; // fallback
-                        
-                        // Create conversation via API
-                        fetch('/api/conversations', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
+                        // Create conversation in localStorage
+                        const conversationId = `conv_${Date.now()}`;
+                        const newConversation = {
+                          id: conversationId,
+                          listing: {
+                            name: selectedDeal.name,
+                            quantity: selectedDeal.quantity,
+                            exchange_type: selectedDeal.exchangeType
                           },
-                          body: JSON.stringify({
-                            listingId: selectedDeal.id,
-                            buyerId: userSession.id,
-                            sellerId: sellerId,
-                          }),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                          if (data.conversation) {
-                            // Redirect to messages page
-                            window.location.href = '/messages';
-                          } else {
-                            alert('Failed to start conversation. Please try again.');
-                          }
-                        })
-                        .catch(error => {
-                          console.error('Error starting conversation:', error);
-                          alert('Failed to start conversation. Please try again.');
-                        });
+                          buyer: { name: userSession.name },
+                          seller: { name: selectedDeal.name },
+                          status: 'active',
+                          updated_at: new Date().toISOString(),
+                          messages: []
+                        };
+
+                        // Save to localStorage
+                        const existingConversations = JSON.parse(localStorage.getItem('testConversations') || '[]');
+                        const updatedConversations = [...existingConversations, newConversation];
+                        localStorage.setItem('testConversations', JSON.stringify(updatedConversations));
+
+                        // Close modal and redirect to messages
+                        closeDealModal();
+                        window.location.href = '/messages';
                       }
                     }}
                     className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-pixel font-semibold py-3 rounded-none border-2 border-blue-700 shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"

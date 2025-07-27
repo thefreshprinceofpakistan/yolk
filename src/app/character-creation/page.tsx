@@ -71,6 +71,27 @@ export default function CharacterCreation() {
     window.location.href = '/';
   };
 
+  const handleSkip = () => {
+    // Create a default character with user's name
+    const defaultCharacter: Character = {
+      animal: 'cow',
+      accessory: 'none',
+      name: currentUser?.name || 'User'
+    };
+
+    // Save default character to localStorage
+    localStorage.setItem('userCharacter', JSON.stringify(defaultCharacter));
+    
+    // Update user session with default character info
+    if (currentUser) {
+      const updatedUser = { ...currentUser, character: defaultCharacter };
+      localStorage.setItem('userSession', JSON.stringify(updatedUser));
+    }
+
+    // Redirect to home page
+    window.location.href = '/';
+  };
+
   if (!currentUser?.isLoggedIn) {
     return (
       <div className="min-h-screen bg-[#ff9e03] flex items-center justify-center">
@@ -265,12 +286,12 @@ export default function CharacterCreation() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/"
+            <button
+              onClick={handleSkip}
               className="bg-egg-pixel-gray hover:bg-egg-pixel-grayDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 text-center"
             >
               SKIP FOR NOW
-            </Link>
+            </button>
             <button
               onClick={handleSave}
               className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-8 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"

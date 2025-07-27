@@ -22,7 +22,7 @@ export default function Mission() {
     return () => clearInterval(interval);
   }, [eggFrames.length]);
   return (
-    <div className="min-h-screen bg-[#ff9e03]">
+    <div className="min-h-screen" style={{ backgroundColor: '#fce583' }}>
       {/* Header */}
       <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -71,10 +71,30 @@ export default function Mission() {
             <h2 className="text-2xl font-pixel font-semibold text-egg-yolkDark mb-8">
               BYPASSING CORPORATIONS
             </h2>
-            <div className="bg-egg-yolkLight/50 p-6 border-2 border-egg-yolk rounded-none max-w-2xl mx-auto">
-              <p className="font-pixel text-lg text-egg-pixel-black italic">
-                Why we call our trades &quot;eggs&quot;? They&apos;re seeds of hope, 
-                bringing life to our communities.
+          </div>
+
+          {/* The Egg Metaphor - NEW SECTION */}
+          <div className="bg-egg-white/80 p-6 border-2 border-egg-yolk rounded-none mb-8">
+            <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4 text-center">
+              WHY WE CALL OUR TRADES &quot;<em>EGGS</em>&quot;
+            </h3>
+            <div className="space-y-4 font-fun text-egg-pixel-black leading-relaxed">
+              <p>
+                Eggs are our symbol because they represent the simple beauty of sharing. 
+                They&apos;re humble, they&apos;re honest, and they&apos;re something everyone understands. 
+                An egg is more than just food; it&apos;s a promise of life, a symbol of hope, 
+                and the perfect metaphor for what we&apos;re building together.
+              </p>
+              <p>
+                When you share an egg, you&apos;re not just sharing food. You&apos;re sharing trust. 
+                You&apos;re saying, &quot;I have something you need, and I believe you have something I need.&quot; 
+                It&apos;s the oldest form of human connection, and it&apos;s how communities have survived 
+                for thousands of years.
+              </p>
+              <p>
+                In a world where corporations control our food and our relationships, 
+                eggs remind us that the most powerful exchanges happen between neighbors, 
+                not between strangers and faceless companies.
               </p>
             </div>
           </div>
@@ -190,7 +210,7 @@ export default function Mission() {
             </div>
           </div>
 
-          {/* What We&apos;re Building */}
+          {/* What We're Building */}
           <div className="bg-egg-white/80 p-6 border-2 border-egg-yolk rounded-none mb-8">
             <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4 text-center">
               WHAT WE&apos;RE BUILDING
@@ -215,26 +235,26 @@ export default function Mission() {
 
           {/* Call to Action */}
           <div className="text-center space-y-6">
-            <div className="bg-egg-yolk/30 p-6 border-2 border-egg-yolk rounded-none">
-              <h3 className="text-xl font-pixel font-bold text-egg-pixel-black mb-3">
+            <div className="bg-egg-yolk/30 p-8 border-2 border-egg-yolk rounded-none">
+              <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
                 JOIN THE REVOLUTION
               </h3>
-              <p className="font-fun text-egg-pixel-black mb-4">
+              <p className="font-fun text-egg-pixel-black mb-6 text-lg">
                 Start small. Share a dozen eggs. Meet a neighbor. 
                 Build something bigger than yourself.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/"
-                  className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                  className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-8 py-4 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg text-lg"
                 >
-                  BROWSE EGGS
+                  BROWSE THE FEED
                 </Link>
                 <Link
                   href="/add"
-                  className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-semibold px-6 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg"
+                  className="bg-egg-white hover:bg-egg-yolkLight text-egg-pixel-black font-pixel font-semibold px-8 py-4 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg text-lg"
                 >
-                  SHARE YOUR EGGS
+                  OFFER A TRADE
                 </Link>
               </div>
             </div>
