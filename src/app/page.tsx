@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+interface Character {
+  animal: 'cow' | 'pig' | 'chick';
+  accessory: 'none' | 'bow' | 'moustache' | 'hat';
+  name: string;
+}
+
 // Mock data for egg listings
 const mockListings = [
   {
@@ -62,7 +68,7 @@ export default function Home() {
   const [filter, setFilter] = useState<ExchangeType>('all');
   const [isLoading, setIsLoading] = useState(false);
   const [allListings, setAllListings] = useState<Listing[]>(mockListings);
-  const [userSession, setUserSession] = useState<{ id: string; name: string; isLoggedIn: boolean } | null>(null);
+  const [userSession, setUserSession] = useState<{ id: string; name: string; isLoggedIn: boolean; character?: Character } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [selectedDeal, setSelectedDeal] = useState<Listing | null>(null);
@@ -87,7 +93,7 @@ export default function Home() {
 
   // Load user session and listings from localStorage on component mount
   useEffect(() => {
-    // Load user session
+    // Load user session from localStorage
     const savedSession = localStorage.getItem('userSession');
     if (savedSession) {
       try {
@@ -95,6 +101,17 @@ export default function Home() {
         setUserSession(session);
       } catch (error) {
         console.error('Error loading user session:', error);
+      }
+    }
+
+    // Load character data
+    const savedCharacter = localStorage.getItem('userCharacter');
+    if (savedCharacter && userSession) {
+      try {
+        const character = JSON.parse(savedCharacter);
+        setUserSession(prev => prev ? { ...prev, character } : null);
+      } catch (error) {
+        console.error('Error loading character:', error);
       }
     }
 
@@ -354,14 +371,55 @@ export default function Home() {
                 </p>
               </div>
             </div>
-
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3">
+              {userSession?.isLoggedIn && userSession?.character && (
+                <Link href="/character-creation" className="flex items-center space-x-2 bg-egg-yolkLight/50 px-3 py-2 border-2 border-egg-yolk rounded-none hover:bg-egg-yolkLight/70 transition-colors duration-200 cursor-pointer">
+                  <div className="relative w-8 h-8">
+                    <Image
+                      src={
+                        userSession.character.animal === 'cow' ? '/pixil-frame-0 (11).png' :
+                        userSession.character.animal === 'pig' ? '/pixil-frame-0 (14).png' :
+                        userSession.character.animal === 'chick' ? '/pixil-frame-0 (13).png' :
+                        '/pixil-frame-0 (9).png' // fallback to egg
+                      }
+                      alt={userSession.character.animal}
+                      width={32}
+                      height={32}
+                      className="w-8 h-8 object-contain"
+                    />
+                    {userSession.character.accessory !== 'none' && (
+                      <div className={`absolute top-0 left-0 w-full h-full flex items-center justify-center ${
+                        userSession.character.accessory === 'moustache' ? 
+                          (userSession.character.animal === 'chick' ? 'translate-y-0' : 'translate-y-1') : 
+                        userSession.character.accessory === 'hat' ? '-translate-y-3' : 
+                        userSession.character.accessory === 'bow' ? '-translate-y-4' : ''
+                      }`}>
+                        <Image
+                          src={
+                            userSession.character.accessory === 'bow' ? '/pixil-frame-0 (15).png' :
+                            userSession.character.accessory === 'moustache' ? '/Adobe Express - file (7).png' :
+                            '/Adobe Express - file (8).png'
+                          }
+                          alt={userSession.character.accessory}
+                          width={16}
+                          height={16}
+                          className="w-4 h-4 object-contain"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-sm font-fun text-egg-pixel-black">
+                    {userSession.character.name}
+                  </span>
+                </Link>
+              )}
               {userSession?.isLoggedIn ? (
                 <>
-                  <span className="text-sm font-fun text-egg-pixel-black">
-                    Welcome, {userSession.name}!
-                  </span>
+                  {!userSession?.character && (
+                    <Link href="/character-creation" className="bg-egg-yolkLight hover:bg-egg-yolk text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
+                      CREATE CHARACTER
+                    </Link>
+                  )}
                   <Link href="/add" className="bg-egg-yolk hover:bg-egg-yolkDark text-egg-pixel-black font-pixel font-semibold px-4 py-2 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg">
                     ADD EGGS
                   </Link>
@@ -418,6 +476,15 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="grid grid-cols-1 gap-3">
+                    {userSession?.isLoggedIn && !userSession?.character && (
+                      <Link 
+                        href="/character-creation"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="bg-egg-yolkLight hover:bg-egg-yolk text-egg-pixel-black font-pixel font-semibold px-4 py-3 rounded-none border-2 border-egg-pixel-black shadow-pixel transition-all duration-200 hover:shadow-pixel-lg text-center"
+                      >
+                        CREATE CHARACTER
+                      </Link>
+                    )}
                     <Link 
                       href="/add" 
                       onClick={() => setIsMobileMenuOpen(false)}

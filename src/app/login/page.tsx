@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+interface Character {
+  animal: 'cow' | 'pig' | 'chick';
+  accessory: 'none' | 'bow' | 'moustache' | 'hat';
+  name: string;
+}
+
 export default function Login() {
   const [formData, setFormData] = useState({
     name: '',
@@ -51,18 +57,41 @@ export default function Login() {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Store user session (in a real app, you'd verify credentials with a server)
-    const userSession = {
+    const userSession: {
+      name: string;
+      isLoggedIn: boolean;
+      loginTime: string;
+      character?: Character;
+    } = {
       name: formData.name,
       isLoggedIn: true,
       loginTime: new Date().toISOString(),
     };
 
+    // Check if user has a character
+    const existingCharacter = localStorage.getItem('userCharacter');
+    
+    if (existingCharacter) {
+      // Load existing character data
+      try {
+        const character = JSON.parse(existingCharacter);
+        userSession.character = character;
+      } catch (error) {
+        console.error('Error loading character:', error);
+      }
+    }
+
     localStorage.setItem('userSession', JSON.stringify(userSession));
     
     setIsSubmitting(false);
     
-    // Redirect to homepage
-    window.location.href = '/';
+    if (!existingCharacter) {
+      // First time user - redirect to character creation
+      window.location.href = '/character-creation';
+    } else {
+      // Returning user - redirect to homepage
+      window.location.href = '/';
+    }
   };
 
   return (
