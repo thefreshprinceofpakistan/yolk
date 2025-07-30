@@ -22,7 +22,7 @@ export default function Mission() {
     return () => clearInterval(interval);
   }, [eggFrames.length]);
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fce583' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#B6D0E2' }}>
       {/* Header */}
       <header className="bg-egg-white/90 backdrop-blur-sm border-b-3 border-egg-yolk shadow-pixel">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -53,28 +53,49 @@ export default function Mission() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-egg-white/90 backdrop-blur-sm rounded-none p-8 shadow-pixel border-3 border-egg-yolk">
+        <div className="bg-white rounded-none p-8 shadow-pixel-lg border-4 border-egg-pixel-black">
           {/* Mission Statement */}
           <div className="text-center mb-12">
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center items-center space-x-4 mb-6 mt-8">
               <Image
                 src={eggFrames[currentEggFrame]}
                 alt="Eggconomy Mission"
-                width={120}
-                height={120}
-                className="w-30 h-30 object-contain animate-bounce"
+                width={100}
+                height={100}
+                className="w-25 h-25 object-contain animate-roll-in-center translate-y-2"
+              />
+              <Image
+                src="/pixil-frame-0 (16).png"
+                alt="Tomato"
+                width={100}
+                height={100}
+                className="w-25 h-25 object-contain animate-roll-in-left"
+              />
+              <Image
+                src="/pixil-frame-0 (17).png"
+                alt="Bread"
+                width={100}
+                height={100}
+                className="w-25 h-25 object-contain animate-roll-in-right"
+              />
+              <Image
+                src="/pixil-frame-0 (19).png"
+                alt="New Food Item"
+                width={100}
+                height={100}
+                className="w-25 h-25 object-contain animate-roll-in-right"
               />
             </div>
             <h1 className="text-4xl font-pixel font-bold text-egg-pixel-black mb-6">
               HATCHING INTO COMMUNITY
             </h1>
-            <h2 className="text-2xl font-pixel font-semibold text-egg-yolkDark mb-8">
+            <h2 className="text-2xl font-pixel font-semibold text-egg-pixel-black mb-8">
               BYPASSING CORPORATIONS
             </h2>
           </div>
 
           {/* The Egg Metaphor - NEW SECTION */}
-          <div className="bg-egg-white/80 p-6 border-2 border-egg-yolk rounded-none mb-8">
+          <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none mb-8 shadow-pixel">
             <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4 text-center">
               WHY WE CALL OUR TRADES &quot;<em>EGGS</em>&quot;
             </h3>
@@ -101,7 +122,7 @@ export default function Mission() {
 
           {/* Core Values */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <div className="bg-egg-yolkLight/50 p-6 border-2 border-egg-yolk rounded-none">
+            <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none shadow-pixel">
               <div className="flex items-center space-x-3 mb-3">
                 <Image
                   src="/Adobe Express - file (5).png"
@@ -120,7 +141,7 @@ export default function Mission() {
               </p>
             </div>
 
-            <div className="bg-egg-yolkLight/50 p-6 border-2 border-egg-yolk rounded-none">
+            <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none shadow-pixel">
               <div className="flex items-center space-x-3 mb-3">
                 <Image
                   src="/Adobe Express - file (4).png"
@@ -139,7 +160,7 @@ export default function Mission() {
               </p>
             </div>
 
-            <div className="bg-egg-yolkLight/50 p-6 border-2 border-egg-yolk rounded-none">
+            <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none shadow-pixel">
               <div className="flex items-center space-x-3 mb-3">
                 <Image
                   src="/Adobe Express - file (1).png"
@@ -158,7 +179,7 @@ export default function Mission() {
               </p>
             </div>
 
-            <div className="bg-egg-yolkLight/50 p-6 border-2 border-egg-yolk rounded-none">
+            <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none shadow-pixel">
               <div className="flex items-center space-x-3 mb-3">
                 <Image
                   src="/pixil-frame-0 (7).png"
@@ -179,7 +200,7 @@ export default function Mission() {
           </div>
 
           {/* How We Started */}
-          <div className="bg-egg-white/80 p-6 border-2 border-egg-yolk rounded-none mb-8">
+          <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none mb-8 shadow-pixel">
             <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4 text-center">
               HOW WE STARTED
             </h3>
@@ -211,7 +232,7 @@ export default function Mission() {
           </div>
 
           {/* What We're Building */}
-          <div className="bg-egg-white/80 p-6 border-2 border-egg-yolk rounded-none mb-8">
+          <div className="bg-white p-6 border-4 border-egg-pixel-black rounded-none mb-8 shadow-pixel">
             <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4 text-center">
               WHAT WE&apos;RE BUILDING
             </h3>
@@ -235,7 +256,7 @@ export default function Mission() {
 
           {/* Call to Action */}
           <div className="text-center space-y-6">
-            <div className="bg-egg-yolk/30 p-8 border-2 border-egg-yolk rounded-none">
+            <div className="bg-white p-8 border-4 border-egg-pixel-black rounded-none shadow-pixel">
               <h3 className="text-2xl font-pixel font-bold text-egg-pixel-black mb-4">
                 JOIN THE REVOLUTION
               </h3>
@@ -261,7 +282,7 @@ export default function Mission() {
           </div>
 
           {/* Footer Quote */}
-          <div className="text-center mt-12 pt-8 border-t-2 border-egg-yolk">
+          <div className="text-center mt-12 pt-8 border-t-4 border-egg-pixel-black">
             <p className="font-pixel text-lg text-egg-pixel-black italic">
               &quot;The best eggs come from happy hens, and the best communities come from happy neighbors.&quot;
             </p>

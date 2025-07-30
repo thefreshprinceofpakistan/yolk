@@ -55,12 +55,17 @@ module.exports = {
           '50%': { transform: 'rotate(-2deg)' },
           '75%': { transform: 'rotate(2deg)' },
         },
+        rock: {
+          '0%, 100%': { transform: 'rotate(-2deg)' },
+          '50%': { transform: 'rotate(2deg)' },
+        },
       },
       animation: {
         crack: 'crack 0.6s ease-in-out',
         bounce: 'bounce 2s infinite',
         wiggle: 'wiggle 1s ease-in-out infinite',
         wobble: 'wobble 2s ease-in-out infinite',
+        rock: 'rock 3s ease-in-out infinite',
       },
       boxShadow: {
         'pixel': '4px 4px 0px rgba(0, 0, 0, 0.1)',

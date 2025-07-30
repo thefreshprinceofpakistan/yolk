@@ -43,3 +43,39 @@ h1, h2, h3, h4, h5, h6, p, span, div, label, input, textarea, select, button, a 
   50% { transform: rotate(-2deg); }
   75% { transform: rotate(2deg); }
 }
+
+@keyframes rock {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes rollInLeft {
+  0% { transform: translateX(-200px) rotate(-360deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+@keyframes rollInRight {
+  0% { transform: translateX(-200px) rotate(-360deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+@keyframes rollInCenter {
+  0% { transform: translateX(-200px) rotate(-360deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+.animate-rock {
+  animation: rock 3s ease-in-out infinite;
+}
+
+.animate-roll-in-left {
+  animation: rollInLeft 1.5s ease-out forwards;
+}
+
+.animate-roll-in-right {
+  animation: rollInRight 1.5s ease-out forwards;
+}
+
+.animate-roll-in-center {
+  animation: rollInCenter 1.5s ease-out forwards;
+}

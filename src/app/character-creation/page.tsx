@@ -250,12 +250,12 @@ export default function CharacterCreation() {
             <h3 className="text-xl font-pixel font-bold text-egg-pixel-black mb-4 text-center">
               ADD AN ACCESSORY
             </h3>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {accessories.map((accessory) => (
                 <button
                   key={accessory.id}
                   onClick={() => setCharacter(prev => ({ ...prev, accessory: accessory.id as 'none' | 'bow' | 'moustache' | 'hat' }))}
-                  className={`p-4 border-3 rounded-none transition-all duration-200 ${
+                  className={`p-3 sm:p-4 border-3 rounded-none transition-all duration-200 ${
                     character.accessory === accessory.id
                       ? 'border-egg-yolk bg-egg-yolkLight/50 shadow-pixel-lg scale-105'
                       : 'border-egg-pixel-black bg-egg-white hover:bg-egg-yolkLight/30 shadow-pixel'
@@ -268,14 +268,14 @@ export default function CharacterCreation() {
                         alt={accessory.name}
                         width={48}
                         height={48}
-                        className="w-12 h-12 object-contain"
+                        className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
                       />
                     ) : (
-                      <div className="w-12 h-12 flex items-center justify-center">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                         <span className="text-egg-pixel-black font-pixel text-xs">—</span>
                       </div>
                     )}
-                    <span className="font-pixel font-semibold text-egg-pixel-black text-sm">
+                    <span className="font-pixel font-semibold text-egg-pixel-black text-xs sm:text-sm text-center leading-tight">
                       {accessory.name}
                     </span>
                   </div>

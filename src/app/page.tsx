@@ -106,10 +106,18 @@ export default function Home() {
 
     // Load character data
     const savedCharacter = localStorage.getItem('userCharacter');
-    if (savedCharacter && userSession) {
+    if (savedCharacter) {
       try {
         const character = JSON.parse(savedCharacter);
-        setUserSession(prev => prev ? { ...prev, character } : null);
+        // Update user session with character data
+        const savedSession = localStorage.getItem('userSession');
+        if (savedSession) {
+          const session = JSON.parse(savedSession);
+          const updatedSession = { ...session, character };
+          setUserSession(updatedSession);
+          // Also update localStorage to keep it in sync
+          localStorage.setItem('userSession', JSON.stringify(updatedSession));
+        }
       } catch (error) {
         console.error('Error loading character:', error);
       }
